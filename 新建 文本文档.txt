@@ -1,0 +1,1 @@
+pyinstaller --onefile --windowed --name DVPTest --icon app.ico --add-data "app.ico;." --hidden-import PySide6.QtXml --hidden-import PySide6.QtMultimedia main.py
