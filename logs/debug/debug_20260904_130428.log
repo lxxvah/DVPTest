@@ -1,7 +1,0 @@
-2026-09-04 13:04:29,021 - DVPTest - INFO - === test_managers.py 已加载（新版本）===
-2026-09-04 13:04:29,022 - DVPTest - INFO - [TestManager] 初始化完成（完全解耦 + InflectionDetector 版）
-2026-09-04 13:04:29,869 - DVPTest - INFO - 主题切换为: dark
-2026-09-04 13:04:29,872 - DVPTest - DEBUG - [MainWindow] 初始化完成
-2026-09-04 13:04:45,439 - DVPTest - INFO - 主题切换为: light
-2026-09-04 13:04:47,056 - DVPTest - INFO - 主题切换为: dark
-2026-09-04 13:04:47,792 - DVPTest - INFO - 主题切换为: light

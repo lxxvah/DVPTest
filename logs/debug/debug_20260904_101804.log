@@ -1,7 +1,0 @@
-2026-09-04 10:18:04,814 - DVPTest - INFO - === test_managers.py 已加载（新版本）===
-2026-09-04 10:18:04,815 - DVPTest - INFO - [TestManager] 初始化完成（完全解耦 + InflectionDetector 版）
-2026-09-04 10:18:05,276 - DVPTest - DEBUG - [UI] MainWindow 初始化完成
-2026-09-04 10:18:30,386 - DVPTest - INFO - 光标 C1 已添加 (x=7.72, y=267.74)
-2026-09-04 10:18:31,238 - DVPTest - INFO - 光标 C2 已添加 (x=3.88, y=125.50)
-2026-09-04 10:18:31,737 - DVPTest - INFO - 光标 B1 已添加 (x=19.59, y=154.90)
-2026-09-04 10:18:32,301 - DVPTest - INFO - 光标 B2 已添加 (x=29.46, y=215.58)

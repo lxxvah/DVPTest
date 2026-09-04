@@ -1,5 +1,0 @@
-2026-09-04 13:19:01,838 - DVPTest - INFO - === test_managers.py 已加载（新版本）===
-2026-09-04 13:19:01,838 - DVPTest - INFO - [TestManager] 初始化完成（完全解耦 + InflectionDetector 版）
-2026-09-04 13:19:02,027 - DVPTest - DEBUG - [UI] MainWindow 初始化完成
-2026-09-04 13:19:05,785 - DVPTest - INFO - 视图已锁定，不再自动适配缩放
-2026-09-04 13:19:07,214 - DVPTest - INFO - 视图已解锁，恢复自动适配
