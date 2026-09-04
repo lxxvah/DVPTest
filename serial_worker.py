@@ -34,7 +34,7 @@ class SerialWorker(QThread):
 
     def run(self):
         try:
-            logger.info(f"正在打开串口 {self.port} @ {self.baudrate}")
+            logger.data(f"串口配置: {self.port} @ {self.baudrate}")
             self.ser = serial.Serial(
                 self.port,
                 self.baudrate,
@@ -45,14 +45,14 @@ class SerialWorker(QThread):
             self.start_time = time.perf_counter()
 
             self.mode = self._auto_detect_protocol()
-            logger.info(f"协议检测完成: device_type={self.device_type}, mode={self.mode}")
+            logger.data(f"串口协议: {self.mode}")
             self.sig_raw.emit(f"[协议选择] device_type={self.device_type}, mode={self.mode}")
 
             if self.mode == "text":
-                logger.info("进入文本模式")
+                logger.debug("进入文本模式")
                 self._run_text_mode()
             else:
-                logger.info("进入二进制模式")
+                logger.debug("进入二进制模式")
                 self._run_binary_mode()
 
         except Exception as e:
@@ -60,7 +60,7 @@ class SerialWorker(QThread):
             self.sig_error.emit(str(e))
         finally:
             self._close_serial()
-            logger.info("run() 结束")
+            logger.debug("run() 结束")
 
     def _auto_detect_protocol(self) -> str:
         if self.device_type in ("simulator", "nibp_simulator"):
@@ -114,6 +114,7 @@ class SerialWorker(QThread):
                     raw = line.decode('utf-8', errors='ignore').strip()
                     pressure = parse_pressure_from_cuff(raw)
                     if pressure is not None:
+                        logger.data(f"测试板 串口: {raw}")
                         t = time.perf_counter() - self.start_time
                         self._emit_data(t, pressure)
                         self.sig_raw.emit(raw)
@@ -121,7 +122,7 @@ class SerialWorker(QThread):
                 time.sleep(Config.SERIAL_IDLE_INTERVAL)
 
     def _run_binary_mode(self):
-        logger.info("二进制模式启动，发送压力表命令")
+        logger.debug("二进制模式启动，发送压力表命令")
         self._send_pressure_table_command()
 
         if self._rx_buffer:
@@ -132,20 +133,17 @@ class SerialWorker(QThread):
         while self.running and self.ser.is_open and not self._stop_event.is_set():
             if self.ser.in_waiting > 0:
                 data = self.ser.read(self.ser.in_waiting)
-                logger.debug(f"读取到 {len(data)} 字节原始数据")
                 self._process_binary_data(data)
             else:
                 time.sleep(Config.SERIAL_IDLE_INTERVAL)
 
     def _process_binary_data(self, data: bytes):
-        logger.debug(f"_process_binary_data 处理 {len(data)} 字节")
         self._rx_buffer.extend(data)
         idx = 0
         while idx < len(self._rx_buffer):
             byte = self._rx_buffer[idx]
 
             if byte == self.HEARTBEAT:
-                logger.debug("检测到心跳，回复")
                 self._reply_heartbeat()
                 idx += 1
                 continue
@@ -156,9 +154,8 @@ class SerialWorker(QThread):
                     break
                 pressure = self._parse_pressure_from_frame(self._rx_buffer, idx)
                 t = time.perf_counter() - self.start_time
-                logger.debug(f"解析出压力: t={t:.3f}, p={pressure:.1f}")
+                logger.data(f"模拟器 压力={pressure:.1f} mmHg")
                 self._emit_data(t, pressure)
-                self.sig_raw.emit(f"[压力] {pressure:.1f} mmHg")
                 idx += self.FRAME_LEN
                 continue
 
@@ -174,7 +171,6 @@ class SerialWorker(QThread):
         return pressure
 
     def _emit_data(self, t: float, p: float):
-        logger.debug(f"发出 sig_data: t={t:.3f}, p={p:.2f}")
         self.sig_data.emit(t, p)
 
     def _reply_heartbeat(self):

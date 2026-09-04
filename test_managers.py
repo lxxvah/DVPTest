@@ -25,7 +25,7 @@ class TestManager:
     def __init__(self, on_result: Callable):
         self.on_result = on_result
         # [LOG] 不再需要 on_log，内部直接用 logger
-        logger.info("=== test_managers.py 已加载（新版本）===")
+        logger.debug("=== test_managers.py 已加载（新版本）===")
         # ==================== 充气参数 ====================
         self.inflate_start_val = 5.0
         self.inflate_mid_val = 200.0
@@ -79,7 +79,7 @@ class TestManager:
         self._was_above_mid = False
         self._was_above_target = False
 
-        logger.info("[TestManager] 初始化完成（完全解耦 + InflectionDetector 版）")
+        logger.debug("[TestManager] 初始化完成（完全解耦 + InflectionDetector 版）")
 
     # ==================== 辅助：创建空数据包 ====================
     def _create_empty_packet(self, ptype: str) -> dict:
@@ -164,8 +164,6 @@ class TestManager:
             logger.debug(f"阶段 DONE，忽略新数据 t={t:.2f}")
             return
 
-        logger.debug(f"process_data: t={t:.2f}, p={p:.1f}, v={signed_rate:.3f}, a={acceleration:.1f}, phase={self.phase.value}")
-
         # ============================================================
         # ★ 第1步：充气峰值跟踪
         # ============================================================
@@ -207,7 +205,7 @@ class TestManager:
             if not self._inflate_result_sent:
                 self._inflate_result_sent = True
                 self._inflate_packet['state'] = 'DONE'
-                logger.info(f"充气结果输出（由泄气拐点触发）: {self._inflate_packet}")
+                logger.info("充气结果已生成（由泄气拐点触发）")
                 logger.success("★ 充气结果已触发（拐点）")
                 self.on_result('inflate', self._inflate_packet.copy())
 
@@ -269,7 +267,7 @@ class TestManager:
                     if not self._inflate_result_sent:
                         self._inflate_result_sent = True
                         self._inflate_packet['state'] = 'DONE'
-                        logger.info(f"充气结果输出（状态切换保底触发）: {self._inflate_packet}")
+                        logger.info("充气结果已生成（状态切换保底触发）")
                         logger.warning("★ 充气结果已触发（保底）")
                         self.on_result('inflate', self._inflate_packet.copy())
 
@@ -349,7 +347,7 @@ class TestManager:
             if not self._deflate_result_sent:
                 self._deflate_result_sent = True
                 self._deflate_packet['state'] = 'DONE'
-                logger.info(f"泄气结果输出（由目标值到达触发）: {self._deflate_packet}")
+                logger.info("泄气结果已生成（由目标值到达触发）")
                 logger.success("★ 泄气结果已触发（目标到达）")
                 self.on_result('deflate', self._deflate_packet.copy())
 

@@ -34,7 +34,7 @@ logger = logging.getLogger("DVPTest")
 class MainWindow(QMainWindow, MainWindowUiMixin):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("泄气充气压力性能测试 作者：得鹿梦鱼  「莫道桑榆晚，为霞尚满天」")
+        self.setWindowTitle("泄气充气压力性能测试 作者：刘欣  「莫道桑榆晚，为霞尚满天」")
         self.setMinimumSize(1200, 720)
 
         self.state = UIState()
@@ -48,7 +48,6 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
 
         self.data_ctrl.sig_plot.connect(self._on_plot_update)
         self.data_ctrl.sig_result_text.connect(self._on_result_text)
-        self.data_ctrl.sig_raw.connect(lambda s: logger.info(f"[串口] {s}"))
         self.data_ctrl.sig_rate.connect(self._on_rate_update)
 
         self._refresh_ports()
@@ -862,6 +861,13 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
             valid = False
 
         if valid:
+            logger.data(
+                "测试配置: 充气="
+                f"{self.state.inflate_start_edit.text()}→{self.state.inflate_mid_edit.text()}→"
+                f"{self.state.inflate_target_edit.text()}, 泄气="
+                f"{self.state.deflate_start_edit.text()}→{self.state.deflate_mid_edit.text()}→"
+                f"{self.state.deflate_target_edit.text()}"
+            )
             self._save_test_settings()
         return valid
 
@@ -880,7 +886,7 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
                 target = float(self.state.inflate_target_edit.text())
                 if self.data_ctrl.update_inflate_params(start, mid, target):
                     self._save_test_settings()
-                    logger.info(f"充气参数已更新: {start}→{mid}→{target}")
+                    logger.data(f"充气参数: {start}→{mid}→{target}")
                 else:
                     logger.warning("充气参数不合法（必须 起始<中间<目标）")
             else:  # deflate
@@ -889,7 +895,7 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
                 target = float(self.state.deflate_target_edit.text())
                 if self.data_ctrl.update_deflate_params(start, mid, target):
                     self._save_test_settings()
-                    logger.info(f"泄气参数已更新: {start}→{mid}→{target}")
+                    logger.data(f"泄气参数: {start}→{mid}→{target}")
                 else:
                     logger.warning("泄气参数不合法（必须 起始>中间>目标）")
         except ValueError:

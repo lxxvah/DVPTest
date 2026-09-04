@@ -92,7 +92,7 @@ class DataController(QObject):
             return False
 
         self.device_type = self._identify_device(port)
-        logger.info(f"设备识别: {self.device_type}")
+        logger.data(f"串口设备: {port}, 类型: {self.device_type}")
 
         try:
             self.worker = SerialWorker(port, baudrate, device_type=self.device_type)

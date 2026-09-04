@@ -14,9 +14,11 @@ from utils import create_directory, format_time
 # 1. 自定义日志级别
 # ============================================================
 SUCCESS_LEVEL = 25          # 介于 INFO (20) 和 WARNING (30) 之间
+DATA_LEVEL    = 21          # 数据和关键业务摘要
 CMD_LEVEL    = 26
 
 logging.addLevelName(SUCCESS_LEVEL, "SUCCESS")
+logging.addLevelName(DATA_LEVEL, "DATA")
 logging.addLevelName(CMD_LEVEL, "CMD")
 
 def success(self, msg, *args, **kwargs):
@@ -27,9 +29,14 @@ def cmd(self, msg, *args, **kwargs):
     if self.isEnabledFor(CMD_LEVEL):
         self._log(CMD_LEVEL, msg, args, **kwargs)
 
+def data(self, msg, *args, **kwargs):
+    if self.isEnabledFor(DATA_LEVEL):
+        self._log(DATA_LEVEL, msg, args, **kwargs)
+
 # 动态注入到 Logger 类
 logging.Logger.success = success
 logging.Logger.cmd = cmd
+logging.Logger.data = data
 
 # ============================================================
 # 2. Qt 桥接（将日志发送到 UI）
@@ -43,6 +50,7 @@ class LogBridge(QObject):
         self._level_map = {
             logging.DEBUG: 'debug',
             logging.INFO: 'info',
+            DATA_LEVEL: 'data',
             SUCCESS_LEVEL: 'success',
             logging.WARNING: 'warning',
             logging.ERROR: 'error',
@@ -59,8 +67,29 @@ _bridge = LogBridge()
 class QtLogHandler(logging.Handler):
     """自定义 Handler，将日志记录转发到 LogBridge 的信号"""
     def emit(self, record: logging.LogRecord):
-        msg = self.format(record)
+        msg = record.getMessage()
         _bridge.emit(msg, record.levelno)
+
+class CompactFormatter(logging.Formatter):
+    """统一文件和控制台的简洁日志格式。"""
+
+    _level_labels = {
+        logging.DEBUG: "Debug",
+        logging.INFO: "Info",
+        DATA_LEVEL: "Data",
+        SUCCESS_LEVEL: "Success",
+        logging.WARNING: "Warning",
+        logging.ERROR: "Error",
+        CMD_LEVEL: "CMD",
+    }
+
+    def format(self, record: logging.LogRecord) -> str:
+        timestamp = self.formatTime(record, "%H:%M:%S")
+        label = self._level_labels.get(record.levelno, record.levelname.title())
+        message = record.getMessage()
+        if record.exc_info:
+            message = f"{message}\n{self.formatException(record.exc_info)}"
+        return f"[{timestamp}] {label} - {message}"
 
 # ============================================================
 # 3. 全局日志配置函数
@@ -105,9 +134,7 @@ def setup_logging(log_dir: str = "./logs/debug", level: int = logging.DEBUG) -> 
     qt_handler.setLevel(level)
 
     # 统一格式
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    )
+    formatter = CompactFormatter()
     fh.setFormatter(formatter)
     ch.setFormatter(formatter)
     qt_handler.setFormatter(formatter)

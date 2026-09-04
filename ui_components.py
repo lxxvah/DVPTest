@@ -1,6 +1,7 @@
 """UI 模块：界面组件、窗口状态和应用主题入口。"""
 import html
 import logging
+import re
 from collections import deque
 from dataclasses import dataclass
 from enum import IntEnum
@@ -138,7 +139,7 @@ class LogWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.log_entries = deque(maxlen=Config.MAX_LOG_ENTRIES)
-        self.filter_level = "全部"
+        self.filter_level = "data"
         self.setup_ui()
 
     def setup_ui(self):
@@ -149,12 +150,14 @@ class LogWidget(QWidget):
         filter_bar.setContentsMargins(8, 4, 8, 4)
         filter_bar.setSpacing(4)
         self.filter_btns = []
-        for label in ["全部", "info", "success", "warning", "error", "cmd"]:
+        for label, level in [("Data", "data"), ("Info", "info"),
+                             ("Success", "success"), ("Warning", "warning"),
+                             ("Error", "error"), ("CMD", "cmd"), ("All", "all")]:
             btn = QPushButton(label)
             btn.setObjectName("logFilterButton")
             btn.setCheckable(True)
             btn.setAutoExclusive(True)
-            btn.clicked.connect(lambda checked, level=label: self._on_filter_clicked(level))
+            btn.clicked.connect(lambda checked, level=level: self._on_filter_clicked(level))
             filter_bar.addWidget(btn)
             self.filter_btns.append(btn)
         self.filter_btns[0].setChecked(True)
@@ -169,6 +172,11 @@ class LogWidget(QWidget):
         self._refresh_display()
 
     def append_log(self, msg: str, level: str = "info"):
+        msg = re.sub(
+            r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3} - .*? - [A-Z]+ - ",
+            "",
+            msg,
+        )
         display_level = "connect" if level == "info" and (
             msg.startswith("已连接到") or msg.startswith("已断开")
         ) else level
@@ -177,7 +185,7 @@ class LogWidget(QWidget):
             self._append_one(msg, display_level)
 
     def _should_show(self, level: str) -> bool:
-        return self.filter_level == "全部" or self.filter_level == level
+        return self.filter_level == "all" or self.filter_level == level
 
     def _refresh_display(self):
         self.text_log.clear()
@@ -188,11 +196,13 @@ class LogWidget(QWidget):
     def _append_one(self, msg: str, display_level: str):
         from utils import get_timestamp
         level_labels = {
+            "data": "Data -", "all": "All -",
             "info": "[info]", "success": "[success]", "warning": "[warning]",
             "error": "[error]", "cmd": "[cmd]", "debug": "[debug]",
             "connect": "[连接]",
         }
         colors = {
+            "data": "#f2cc60",
             "info": "#c9d1d9", "success": "#3fb950", "warning": "#d29922",
             "error": "#f85149", "cmd": "#58a6ff", "debug": "#8b949e",
             "connect": "#c9d1d9",
