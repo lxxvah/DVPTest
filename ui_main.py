@@ -6,7 +6,8 @@ import math
 import logging
 
 from PySide6.QtCore import (
-    QObject, Signal, Slot, QThread, Qt, QRectF, QEvent, QTimer, QSettings
+    QObject, Signal, Slot, QThread, Qt, QRectF, QEvent, QTimer, QSettings,
+    QSignalBlocker
 )
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
@@ -33,7 +34,7 @@ logger = logging.getLogger("DVPTest")
 class MainWindow(QMainWindow, MainWindowUiMixin):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("泄气阀压力测试上位机 作者：得鹿梦鱼  「莫道桑榆晚，为霞尚满天」")
+        self.setWindowTitle("泄气充气压力性能测试 作者：得鹿梦鱼  「莫道桑榆晚，为霞尚满天」")
         self.setMinimumSize(1200, 720)
 
         self.state = UIState()
@@ -52,6 +53,7 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
 
         self._refresh_ports()
         self._load_serial_settings()
+        self._load_test_settings()
         self._update_buttons()
 
         # ★ 光标系统（两组独立测量）
@@ -705,6 +707,46 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
             self.state.label_status.setText(f"● {text}")
 
     # ---------- 串口记忆 ----------
+    def _test_settings(self):
+        return QSettings("YourCompany", "PressureTest")
+
+    def _load_test_settings(self):
+        settings = self._test_settings()
+        defaults = {
+            "inflate/start": Config.INFLATE_DEFAULT[0],
+            "inflate/mid": Config.INFLATE_DEFAULT[1],
+            "inflate/target": Config.INFLATE_DEFAULT[2],
+            "deflate/start": Config.DEFLATE_DEFAULT[0],
+            "deflate/mid": Config.DEFLATE_DEFAULT[1],
+            "deflate/target": Config.DEFLATE_DEFAULT[2],
+        }
+        edits = {
+            "inflate/start": self.state.inflate_start_edit,
+            "inflate/mid": self.state.inflate_mid_edit,
+            "inflate/target": self.state.inflate_target_edit,
+            "deflate/start": self.state.deflate_start_edit,
+            "deflate/mid": self.state.deflate_mid_edit,
+            "deflate/target": self.state.deflate_target_edit,
+        }
+        blockers = [QSignalBlocker(edit) for edit in edits.values()]
+        for key, edit in edits.items():
+            edit.setText(str(settings.value(f"test/{key}", defaults[key])))
+        del blockers
+        self._read_params_to_ctrl()
+
+    def _save_test_settings(self):
+        settings = self._test_settings()
+        values = {
+            "inflate/start": self.state.inflate_start_edit.text(),
+            "inflate/mid": self.state.inflate_mid_edit.text(),
+            "inflate/target": self.state.inflate_target_edit.text(),
+            "deflate/start": self.state.deflate_start_edit.text(),
+            "deflate/mid": self.state.deflate_mid_edit.text(),
+            "deflate/target": self.state.deflate_target_edit.text(),
+        }
+        for key, value in values.items():
+            settings.setValue(f"test/{key}", value)
+
     def _load_serial_settings(self):
         settings = QSettings("YourCompany", "PressureTest")
         port = settings.value("serial/port", Config.DEFAULT_PORT)
@@ -796,14 +838,32 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
         self.state.btn_lock_view.setStyleSheet(UITheme.BUTTON_STYLES["action"])
 
     def _read_params_to_ctrl(self):
+        valid = True
         try:
             start = float(self.state.inflate_start_edit.text())
             mid = float(self.state.inflate_mid_edit.text())
             target = float(self.state.inflate_target_edit.text())
             if not self.data_ctrl.update_inflate_params(start, mid, target):
                 logger.warning("充气参数不满足: 起始 < 中间 < 目标，请检查")
+                valid = False
         except ValueError:
             logger.warning("充气参数含有非法数字，请检查输入")
+            valid = False
+
+        try:
+            start = float(self.state.deflate_start_edit.text())
+            mid = float(self.state.deflate_mid_edit.text())
+            target = float(self.state.deflate_target_edit.text())
+            if not self.data_ctrl.update_deflate_params(start, mid, target):
+                logger.warning("泄气参数不满足: 起始 > 中间 > 目标，请检查")
+                valid = False
+        except ValueError:
+            logger.warning("泄气参数含有非法数字，请检查输入")
+            valid = False
+
+        if valid:
+            self._save_test_settings()
+        return valid
 
     def _on_param_change(self, test_key: str):
         if self.state.test_state == UITestState.FINISHED:
@@ -819,6 +879,7 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
                 mid = float(self.state.inflate_mid_edit.text())
                 target = float(self.state.inflate_target_edit.text())
                 if self.data_ctrl.update_inflate_params(start, mid, target):
+                    self._save_test_settings()
                     logger.info(f"充气参数已更新: {start}→{mid}→{target}")
                 else:
                     logger.warning("充气参数不合法（必须 起始<中间<目标）")
@@ -827,6 +888,7 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
                 mid = float(self.state.deflate_mid_edit.text())
                 target = float(self.state.deflate_target_edit.text())
                 if self.data_ctrl.update_deflate_params(start, mid, target):
+                    self._save_test_settings()
                     logger.info(f"泄气参数已更新: {start}→{mid}→{target}")
                 else:
                     logger.warning("泄气参数不合法（必须 起始>中间>目标）")
@@ -840,7 +902,9 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
         if self.state.test_state == UITestState.RUNNING:
             logger.warning("测试正在进行中，请勿重复开始")
             return
-        self._read_params_to_ctrl()
+        if not self._read_params_to_ctrl():
+            logger.warning("测试参数无效，已取消启动")
+            return
         self.data_ctrl.reset_all()
         if self.data_ctrl.send_command("AT#AG"):
             self.state.test_state = UITestState.RUNNING
