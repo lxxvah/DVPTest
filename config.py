@@ -1,516 +1,184 @@
-# config.py
-"""全局配置"""
+"""业务、设备和运行参数配置。"""
+
 
 class Config:
-    COLORS = {
-        'bg_main': '#0d1117',
-        'bg_panel': '#151b22',
-        'bg_chart': '#0d1117',
-        'border': '#21262d',
-        'fg_text': '#c9d1d9',
-        'fg_secondary': '#8b949e',
-        'fg_highlight': '#58a6ff',
-        'pressure_curve': '#58a6ff',
-        'rate_curve': '#d4a373',         # 改为柔和金色
-        'inflate_result': '#3fb950',
-        'deflate_result': '#f85149',
-        'instant_rate': '#d29922',
-        'avg_rate': '#58a6ff',
-        'log_green': '#3fb950',
-        'log_white': '#c9d1d9',
-        'log_yellow': '#d29922',
-        'log_blue': '#58a6ff',
-        'log_red': '#f85149',
-    }
-    BAUDRATES = ["1200", "2400", "4800", "9600", "19200", "38400", "57600",
-                 "115200", "230400", "460800", "921600"]
+    # ==================== 串口连接 ====================
+    # 下拉框中允许选择的串口通信波特率。
+    BAUDRATES = [
+        "1200", "2400", "4800", "9600", "19200", "38400", "57600",
+        "115200", "230400", "460800", "921600",
+    ]
+    # 程序首次启动时使用的默认波特率；也会作为串口设置的初始值。
     DEFAULT_BAUD = "115200"
+    # 程序首次启动时优先选择的默认串口号；不存在时会自动选择可用串口。
     DEFAULT_PORT = "COM7"
+    # 串口读写超时时间，单位为秒；过小可能丢数据，过大会降低停止响应速度。
+    SERIAL_READ_TIMEOUT = 0.5
+    SERIAL_WRITE_TIMEOUT = 0.5
+
+    # ==================== 数据采集和显示 ====================
+    # 内存中最多保留的数据点数量；增大可显示更长波形，但会增加内存和绘图开销。
     MAX_DATA_POINTS = 5000
+    # 两次绘图信号更新的最小间隔，单位为毫秒；数值越小刷新越快，但 UI 负担越大。
     PLOT_INTERVAL_MS = 50
+    # 泄气达到目标后，当压力低于该值时暂停绘图更新，单位为 mmHg。
+    PLOT_STOP_THRESHOLD = 0.2
+    # 日志窗口最多保留的日志条数；超过后自动删除最早的记录。
+    MAX_LOG_ENTRIES = 10000
+    # 自动检测串口设备的执行周期，单位为毫秒。
+    AUTO_CONNECT_INTERVAL_MS = 2000
+    # 等待设备切换 PC 模式完成的时间，单位为秒。
+    PC_MODE_SWITCH_DELAY = 0.2
+
+    # ==================== 测试默认参数 ====================
+    # 充气测试的默认阈值：(起始压力, 中间压力, 目标压力)，单位为 mmHg。
     INFLATE_DEFAULT = (5, 200, 300)
+    # 泄气测试的默认阈值：(起始压力, 中间压力, 目标压力)，单位为 mmHg。
     DEFLATE_DEFAULT = (300, 200, 5)
+    # 慢速泄气判定阈值，单位为 mmHg/s；低于该速率时可被识别为慢漏气。
+    LEAK_RATE_THRESHOLD = 3.0
+    # 主动泄气判定阈值，单位为 mmHg/s；达到该速率时可被识别为主动释放。
+    ACTIVE_RELEASE_THRESHOLD = 12.0
+    # 判断压力变化方向的最小速率，单位为 mmHg/s；绝对值小于该值时视为基本不变。
+    DIRECTION_THRESHOLD = 0.05
 
-    DATA_PATTERN = r'^cuff=(\d+\.?\d*)\s*mmHg$'
+    # ==================== 拐点检测参数 ====================
+    # 拐点检测保留的历史数据点数；增大可观察更长趋势，但响应会变慢。
+    INFLECTION_HISTORY_SIZE = 10
+    # 开始趋势判断所需的最少数据点数。
+    INFLECTION_MIN_POINTS = 4
+    # 计算趋势斜率时的最小时间差，单位为秒；用于避免除以接近零的时间差。
+    INFLECTION_MIN_TIME_DELTA = 0.001
+    # 峰值附近的压力距离，单位为 mmHg；用于识别慢漏气起始区域。
+    INFLECTION_LEAK_PEAK_DISTANCE = 2.0
+    # 慢漏气速率下限和上限，单位为 mmHg/s。
+    INFLECTION_SLOW_LEAK_RATE_MIN = -1.0
+    INFLECTION_SLOW_LEAK_RATE_MAX = -0.05
+    # 从慢漏气切换到主动泄气的速率阈值，单位为 mmHg/s。
+    INFLECTION_ACTIVE_FROM_LEAK_RATE = -1.0
+    # 速率+加速度策略的速率阈值，单位为 mmHg/s。
+    INFLECTION_ACTIVE_RATE = -0.5
+    # 速率+加速度策略的加速度阈值，单位为 mmHg/s^2。
+    INFLECTION_ACTIVE_ACCELERATION = -5.0
+    # 主动泄气检测要求距离峰值的最小压力差，单位为 mmHg。
+    INFLECTION_ACTIVE_PEAK_DISTANCE = 0.2
+    # 仅速率持续下降策略的速率阈值，单位为 mmHg/s。
+    INFLECTION_CONTINUOUS_RATE = -0.3
+    # 持续下降策略的最小压力下降量，单位为 mmHg。
+    INFLECTION_CONTINUOUS_DROP = 0.3
+    # 候选拐点连续满足条件的次数。
+    INFLECTION_CANDIDATE_COUNT = 2
+    # 连续下降策略确认所需的连续点数。
+    INFLECTION_ACTIVE_COUNT = 3
+    # 连续下降策略的最小累计压力下降量，单位为 mmHg。
+    INFLECTION_TOTAL_DROP = 0.15
+    # 判断压力重新上升的速率阈值，单位为 mmHg/s。
+    INFLECTION_RISING_RATE = 0.05
+    # 判断峰值附近恢复稳定的压力距离，单位为 mmHg。
+    INFLECTION_RESET_PEAK_DISTANCE = 0.5
+    # 检测到拐点后，部分状态不再重复触发。
+    INFLECTION_RATE_EPSILON = -0.05
+    # 漏气平均速率的历史值权重；越大越平滑但响应越慢。
+    INFLECTION_LEAK_AVERAGE_WEIGHT = 0.8
+    # 当前速率在漏气平均值中的权重。
+    INFLECTION_LEAK_CURRENT_WEIGHT = 0.2
+    # 连续下降策略要求压力低于峰值的最小差值，单位为 mmHg。
+    INFLECTION_CONTINUOUS_PEAK_DISTANCE = 0.0
+
+    # ==================== 数据解析和速率计算 ====================
+    # 文本协议压力数据格式；用于匹配类似“cuff=123.4 mmHg”的设备输出。
+    DATA_PATTERN = r"^cuff=(\d+\.?\d*)\s*mmHg$"
+    # 单次采样允许的最大压力变化量；0 表示当前不限制该项。
     MAX_PRESSURE_STEP = 0
+    # 是否启用速率滤波；关闭后使用未滤波的速率数据。
+    RATE_FILTER_ENABLE = True
+    # 速率滤波使用的历史采样窗口大小；增大可使曲线更平滑，但响应更慢。
+    RATE_FILTER_WINDOW = 5
+    # 速率滤波的离群值判断参数；数值越大，越不容易剔除突变点。
+    RATE_FILTER_SIGMA = 2.0
+    # 速率曲线显示允许的最大值，单位为 mmHg/s；用于限制绘图曲线范围。
+    RATE_CURVE_MAX = 1000.0
+    # 速率计算和结果显示的总上限，单位为 mmHg/s；超过后会被截断或显示为上限提示。
+    MAX_RATE_LIMIT = 2000.0
+    # 时间差保护下限，单位为秒；小于该值时不进行差分计算。
+    TIME_DELTA_EPSILON = 1e-9
+    # NumPy 速率曲线替换零时间差时使用的时间值，单位为秒。
+    ZERO_TIME_DELTA = 1e-6
+    # 加速度计算上限，单位为 mmHg/s^2；用于抑制传感器尖峰。
+    MAX_ACCELERATION_LIMIT = 10000.0
+    # 界面显示压力的最低有效值，单位为 mmHg；低于该值显示占位符。
+    MIN_DISPLAY_PRESSURE = 0.0
 
+    # ==================== 设备识别 ====================
+    # 无创模拟器/测试板的 USB 厂商 ID 和产品 ID，用于自动识别设备。
     SIMULATOR_VID = 0x1A86
     SIMULATOR_PID = 0x7523
-
-    RATE_FILTER_ENABLE = True
-    RATE_FILTER_WINDOW = 5
-    RATE_FILTER_SIGMA = 2.0
-
-    DIRECTION_THRESHOLD = 0.05
-    RATE_CURVE_MAX = 1000.0
-    MAX_RATE_LIMIT = 2000.0
-
-    FONT_SIZE = 13
-    FONT_SIZE_TITLE = 15
-    FONT_SIZE_DATA = 13
-    FONT_SIZE_LOG = 11
-
-    PLOT_STOP_THRESHOLD = 0.2
-    MAX_LOG_ENTRIES = 10000
-
-    LEAK_RATE_THRESHOLD = 3.0
-    ACTIVE_RELEASE_THRESHOLD = 12.0
-
-    HEARTBEAT_CMD = 0x09
-    PRESSURE_SCALE = 0.01
-    PRESSURE_OFFSET = -10.0
+    # NIBP 设备的 USB 厂商 ID 和产品 ID；0x0000 表示当前未配置专用识别号。
     NIBP_VID = 0x0000
     NIBP_PID = 0x0000
+    # 自动探测串口协议的最长等待时间，单位为秒；超时后使用默认协议处理。
     DETECT_TIMEOUT = 0.3
+    # 断开串口前的等待时间，单位为秒；用于等待设备完成命令处理。
+    DISCONNECT_DELAY = 0.2
+    # 协议探测开始前的等待时间，单位为秒。
+    PROTOCOL_DETECT_DELAY = 0.1
+    # 协议探测循环的轮询间隔，单位为秒。
+    PROTOCOL_SNIFF_INTERVAL = 0.01
+    # 串口无数据时的读取线程休眠时间，单位为秒。
+    SERIAL_IDLE_INTERVAL = 0.001
+    # 未知协议嗅探时，达到该字节数后提前结束读取。
+    PROTOCOL_SNIFF_MAX_BYTES = 64
+    # 二进制帧头和完整帧长度，长度单位为字节。
+    BINARY_FRAME_HEADER = 0xAA
+    BINARY_FRAME_LENGTH = 8
+    # 心跳回复帧长度，长度单位为字节。
+    HEARTBEAT_REPLY_LENGTH = 8
+    # 二进制压力表测试命令的实际发送帧。
+    PRESSURE_TABLE_COMMAND = [0x03, 0x02, 0x00]
 
-    BUTTON_TEXTS = {
-        "refresh": ("刷新", "btn_action", False, False),
-        "clear": ("清屏", "btn_action", False, False),
-        "toggle_plot": ("暂停绘图", "btn_toggle_plot", False, False),
-        "toggle_rate": ("速率曲线：开", "btn_action", True, True),
-        "connect": ("连接", "btn_connect", False, False),
-        "disconnect": ("断开", "btn_disconnect", False, False),
-        "start": ("开始 AT#AG", "btn_start", False, False),
-        "stop": ("结束 AT#AH", "btn_stop", False, False),
-        "save_img": ("保存图片", "btn_action", False, False),
-        "save_csv": ("保存CSV", "btn_action", False, False),
-        "load_wave": ("加载波形", "btn_action", False, False),
-        "cursor": ("光标测量", "btn_action", False, False),
-    }
+    # ==================== 二进制协议换算 ====================
+    # 二进制协议中的心跳命令字节；用于维持设备通信状态。
+    HEARTBEAT_CMD = 0x09
+    # 二进制压力原始值的缩放系数：压力值 = 原始值 * PRESSURE_SCALE + PRESSURE_OFFSET。
+    PRESSURE_SCALE = 0.01
+    # 二进制压力换算时的固定偏移量，单位为 mmHg。
+    PRESSURE_OFFSET = -10.0
 
+    # ==================== 二进制控制命令 ====================
+    # 发送给设备的固定长度二进制命令；修改字节可能改变设备工作模式或测试动作。
     BINARY_COMMANDS = {
+        # 进入设备 PC 控制界面。
         "enter_pc": [0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
-        "exit_pc":  [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
+        # 退出设备 PC 控制界面。
+        "exit_pc": [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
+        # 执行压力表测试。
         "pressure_test": [0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
     }
 
-    # ============================================================
-    # ★ 按钮样式字典（集中定义，保证所有按钮样式统一且 100% 生效）
-    #   使用方法：btn.setStyleSheet(Config.BUTTON_STYLES["样式名"])
-    # ============================================================
-    BUTTON_STYLES = {
-        # 连接：柔光绿
-        "connect": """
-            QPushButton {
-                background: #66bb6a;
-                color: #ffffff;
-                border: 1px solid #4caf50;
-                border-radius: 4px;
-                padding: 5px 12px;
-                font-weight: bold;
-            }
-            QPushButton:hover { background: #81c784; }
-            QPushButton:pressed { background: #4caf50; padding-top: 6px; padding-bottom: 4px; }
-            QPushButton:disabled { background: #2e7d32; color: #a5d6a7; border: 1px solid #388e3c; }
-        """,
-        # 断开：柔光红
-        "disconnect": """
-            QPushButton {
-                background: #ef9a9a;
-                color: #ffffff;
-                border: 1px solid #e57373;
-                border-radius: 4px;
-                padding: 5px 12px;
-                font-weight: bold;
-            }
-            QPushButton:hover { background: #ffcdd2; }
-            QPushButton:pressed { background: #e57373; padding-top: 6px; padding-bottom: 4px; }
-            QPushButton:disabled { background: #c62828; color: #ef9a9a; border: 1px solid #b71c1c; }
-        """,
-        # 开始：柔光蓝渐变
-        "start": """
-            QPushButton {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #64b5f6, stop:1 #1e88e5);
-                color: #ffffff;
-                border: 1px solid #1e88e5;
-                border-radius: 4px;
-                padding: 5px 12px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #90caf9, stop:1 #42a5f5);
-            }
-            QPushButton:pressed {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #1565c0, stop:1 #0d47a1);
-                border: 1px solid #0d47a1;
-                padding-top: 6px;
-                padding-bottom: 4px;
-            }
-            QPushButton:disabled { background: #0d47a1; color: #90caf9; border: 1px solid #1565c0; }
-        """,
-        # 停止：柔光橙渐变
-        "stop": """
-            QPushButton {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #ffb74d, stop:1 #f57c00);
-                color: #ffffff;
-                border: 1px solid #f57c00;
-                border-radius: 4px;
-                padding: 5px 12px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #ffcc80, stop:1 #fb8c00);
-            }
-            QPushButton:pressed {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #e65100, stop:1 #bf360c);
-                border: 1px solid #bf360c;
-                padding-top: 6px;
-                padding-bottom: 4px;
-            }
-            QPushButton:disabled { background: #bf360c; color: #ffcc80; border: 1px solid #e65100; }
-        """,
-        # 通用操作：柔光灰蓝
-        "action": """
-            QPushButton {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #78909c, stop:1 #546e7a);
-                color: #ffffff;
-                border: 1px solid #546e7a;
-                border-radius: 4px;
-                padding: 4px 10px;
-                font-size: 13px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #90a4ae, stop:1 #78909c);
-            }
-            QPushButton:pressed {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #455a64, stop:1 #37474f);
-                border: 1px solid #37474f;
-                padding-top: 5px;
-                padding-bottom: 3px;
-            }
-            QPushButton:disabled { background: #37474f; color: #90a4ae; border: 1px solid #455a64; }
-        """,
-        # 暂停绘图：柔光绿边框
-        "toggle_plot": """
-            QPushButton {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #388e3c, stop:1 #1b5e20);
-                color: #ffffff;
-                border: 1px solid #4caf50;
-                border-radius: 4px;
-                padding: 4px 10px;
-                font-size: 13px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #43a047, stop:1 #2e7d32);
-                color: #ffffff;
-            }
-            QPushButton:pressed {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #1b5e20, stop:1 #0a2a0a);
-                border: 1px solid #1b5e20;
-                padding-top: 5px;
-                padding-bottom: 3px;
-            }
-            QPushButton:disabled { background: #1b5e20; color: #81c784; border: 1px solid #2e7d32; }
-        """,
-        # 速率曲线开：金色（呼应曲线颜色）
-        "rate_on": """
-            QPushButton {
-                background: #d4a373;
-                color: #ffffff;
-                border: 1px solid #b8956a;
-                border-radius: 4px;
-                padding: 4px 10px;
-                font-size: 13px;
-                font-weight: bold;
-            }
-            QPushButton:hover { background: #c9a07a; }
-            QPushButton:pressed { background: #b8956a; padding-top: 5px; padding-bottom: 3px; }
-            QPushButton:disabled { background: #8d6e63; color: #d7ccc8; border: 1px solid #795548; }
-        """,
-        # 速率曲线关：柔和灰
-        "rate_off": """
-            QPushButton {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #78909c, stop:1 #546e7a);
-                color: #ffffff;
-                border: 1px solid #546e7a;
-                border-radius: 4px;
-                padding: 4px 10px;
-                font-size: 13px;
-                font-weight: bold;
-            }
-            QPushButton:hover {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #90a4ae, stop:1 #78909c);
-            }
-            QPushButton:pressed {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                            stop:0 #455a64, stop:1 #37474f);
-                border: 1px solid #37474f;
-                padding-top: 5px;
-                padding-bottom: 3px;
-            }
-            QPushButton:disabled { background: #37474f; color: #90a4ae; border: 1px solid #455a64; }
-        """,
-        # 锁定视图激活：深绿
-        "lock_active": """
-            QPushButton {
-                background: #1f6f3b;
-                color: #ffffff;
-                border: 1px solid #1f6f3b;
-                border-radius: 4px;
-                padding: 4px 10px;
-                font-weight: bold;
-            }
-            QPushButton:hover { background: #2a8f4b; }
-            QPushButton:pressed { background: #145a2a; }
-        """,
-    }
+    # ==================== 绘图和界面尺寸 ====================
+    # 主窗口自动连接定时器和初始绘图范围等 UI 参数。
+    PLOT_INITIAL_X_RANGE = (0, 60)
+    PLOT_INITIAL_Y_RANGE = (0, 350)
+    PLOT_INITIAL_RATE_RANGE = (0, 50)
+    PLOT_AUTO_MIN_TIME = 10
+    PLOT_AUTO_TIME_PADDING = 2
+    PLOT_AUTO_PRESSURE_PADDING = 10
+    PLOT_RATE_CURRENT_THRESHOLD = 20
+    PLOT_RATE_LOW_MAX = 25.0
+    PLOT_RATE_MEDIUM_MAX = 50
+    PLOT_RATE_LOW_STEP = 0.5
+    PLOT_RATE_MEDIUM_STEP = 2
+    PLOT_RATE_HIGH_STEP = 5
+    PLOT_RATE_HIGH_PADDING = 5
+    PLOT_MAX_TICK_COUNT = 15
+    PLOT_ZOOM_FACTOR = 1.1
 
-    STYLESHEET = f"""
-    * {{ margin: 0; padding: 0; }}
-    QMainWindow, QWidget {{ background-color: #0d1117; color: #c9d1d9; }}
-
-    /* ----- 通用按钮（无 id）—— 使用 background-color 纯色，避免覆盖 ID 选择器 ----- */
-    QPushButton {{
-        background-color: #4a6a8a;
-        color: #ffffff;
-        border: 1px solid #3a5a7a;
-        border-radius: 4px;
-        padding: 5px 10px;
-        font-size: {FONT_SIZE}px;
-        font-weight: bold;
-    }}
-    QPushButton:hover {{
-        background-color: #5a7a9a;
-    }}
-    QPushButton:pressed {{
-        background-color: #2a4a6a;
-        border: 1px solid #2a4a6a;
-        padding-top: 6px;
-        padding-bottom: 4px;
-    }}
-    QPushButton:disabled {{
-        background-color: #2a3a4a;
-        color: #6a7a8a;
-        border: 1px solid #3a4a5a;
-    }}
-
-    /* ----- 连接按钮（柔光绿） ----- */
-    QPushButton#btn_connect {{
-        background: #66bb6a;
-        color: #ffffff;
-        border: 1px solid #4caf50;
-        border-radius: 4px;
-        padding: 5px 12px;
-        font-weight: bold;
-    }}
-    QPushButton#btn_connect:hover {{
-        background: #81c784;
-    }}
-    QPushButton#btn_connect:pressed {{
-        background: #4caf50;
-        padding-top: 6px;
-        padding-bottom: 4px;
-    }}
-    QPushButton#btn_connect:disabled {{
-        background: #2e7d32;
-        color: #a5d6a7;
-        border: 1px solid #388e3c;
-    }}
-
-    /* ----- 断开按钮（柔光红） ----- */
-    QPushButton#btn_disconnect {{
-        background: #ef9a9a;
-        color: #ffffff;
-        border: 1px solid #e57373;
-        border-radius: 4px;
-        padding: 5px 12px;
-        font-weight: bold;
-    }}
-    QPushButton#btn_disconnect:hover {{
-        background: #ffcdd2;
-    }}
-    QPushButton#btn_disconnect:pressed {{
-        background: #e57373;
-        padding-top: 6px;
-        padding-bottom: 4px;
-    }}
-    QPushButton#btn_disconnect:disabled {{
-        background: #c62828;
-        color: #ef9a9a;
-        border: 1px solid #b71c1c;
-    }}
-
-    /* ----- 开始按钮（柔光蓝渐变） ----- */
-    QPushButton#btn_start {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #64b5f6, stop:1 #1e88e5);
-        color: #ffffff;
-        border: 1px solid #1e88e5;
-        border-radius: 4px;
-        padding: 5px 12px;
-        font-weight: bold;
-    }}
-    QPushButton#btn_start:hover {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #90caf9, stop:1 #42a5f5);
-    }}
-    QPushButton#btn_start:pressed {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #1565c0, stop:1 #0d47a1);
-        border: 1px solid #0d47a1;
-        padding-top: 6px;
-        padding-bottom: 4px;
-    }}
-    QPushButton#btn_start:disabled {{
-        background: #0d47a1;
-        color: #90caf9;
-        border: 1px solid #1565c0;
-    }}
-
-    /* ----- 停止按钮（柔光橙渐变） ----- */
-    QPushButton#btn_stop {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #ffb74d, stop:1 #f57c00);
-        color: #ffffff;
-        border: 1px solid #f57c00;
-        border-radius: 4px;
-        padding: 5px 12px;
-        font-weight: bold;
-    }}
-    QPushButton#btn_stop:hover {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #ffcc80, stop:1 #fb8c00);
-    }}
-    QPushButton#btn_stop:pressed {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #e65100, stop:1 #bf360c);
-        border: 1px solid #bf360c;
-        padding-top: 6px;
-        padding-bottom: 4px;
-    }}
-    QPushButton#btn_stop:disabled {{
-        background: #bf360c;
-        color: #ffcc80;
-        border: 1px solid #e65100;
-    }}
-
-    /* ----- 通用操作按钮（柔光灰蓝） ----- */
-    QPushButton#btn_action {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #78909c, stop:1 #546e7a);
-        color: #ffffff;
-        border: 1px solid #546e7a;
-        border-radius: 4px;
-        padding: 4px 10px;
-        font-size: {FONT_SIZE}px;
-        font-weight: bold;
-    }}
-    QPushButton#btn_action:hover {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #90a4ae, stop:1 #78909c);
-        color: #ffffff;
-    }}
-    QPushButton#btn_action:pressed {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #455a64, stop:1 #37474f);
-        border: 1px solid #37474f;
-        padding-top: 5px;
-        padding-bottom: 3px;
-    }}
-    QPushButton#btn_action:disabled {{
-        background: #37474f;
-        color: #90a4ae;
-        border: 1px solid #455a64;
-    }}
-
-    /* ----- 暂停绘图按钮（柔光绿边框） ----- */
-    QPushButton#btn_toggle_plot {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #388e3c, stop:1 #1b5e20);
-        color: #ffffff;
-        border: 1px solid #4caf50;
-        border-radius: 4px;
-        padding: 4px 10px;
-        font-size: {FONT_SIZE}px;
-        font-weight: bold;
-    }}
-    QPushButton#btn_toggle_plot:hover {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #43a047, stop:1 #2e7d32);
-        color: #ffffff;
-    }}
-    QPushButton#btn_toggle_plot:pressed {{
-        background: qlineargradient(x1:0, y1:0, x2:0, y2:1,
-                                    stop:0 #1b5e20, stop:1 #0a2a0a);
-        border: 1px solid #1b5e20;
-        padding-top: 5px;
-        padding-bottom: 3px;
-    }}
-    QPushButton#btn_toggle_plot:disabled {{
-        background: #1b5e20;
-        color: #81c784;
-        border: 1px solid #2e7d32;
-    }}
-
-    /* ----- 其他控件（字体增大、高亮白、加粗） ----- */
-    QLineEdit, QComboBox {{
-        background-color: #0d1117;
-        color: #c9d1d9;
-        border: 1px solid #21262d;
-        padding: 3px 4px;
-        border-radius: 0px;
-        font-size: {FONT_SIZE}px;
-    }}
-    QComboBox::drop-down {{ border: none; }}
-    QComboBox::down-arrow {{ image: none; }}
-    QTextEdit {{
-        background-color: #0d1117;
-        color: #c9d1d9;
-        border: 1px solid #21262d;
-        font-family: Consolas;
-        font-size: {FONT_SIZE_LOG}pt;
-        border-radius: 0px;
-    }}
-    QGroupBox {{
-        border: 1px solid #21262d;
-        margin-top: 8px;
-        border-radius: 0px;
-        font-size: {FONT_SIZE}px;
-        padding-top: 8px;
-    }}
-    QGroupBox::title {{
-        subcontrol-origin: margin;
-        left: 8px;
-        padding: 0 4px;
-        color: #ffffff;          /* 高亮白 */
-        font-size: 14px;         /* 单独调大 */
-        font-weight: bold;       /* 加粗 */
-    }}
-    QLabel {{
-        font-size: 14px;         /* 或 {FONT_SIZE}px */
-        color: #ffffff;          /* 高亮白 */
-        font-weight: bold;       /* 加粗 */
-    }}
-
-    /* ========== 新增：通用动态按钮状态属性选择器 ========== */
-    QPushButton[state="normal"]{{}}
-    QPushButton[state="active"]{{
-        background-color:#1f6f3b;
-        color:#ffffff;
-    }}
-    QPushButton[state="warn"]{{
-        background-color:#6b2a2a;
-        color:#ffffff;
-    }}
-    QPushButton[state="highlight"]{{
-        background-color:#254b9c;
-        color:#ffffff;
-    }}
-    """
-    DISCONNECT_DELAY = 0.2
+    UI_TOOLBAR_HEIGHT = 36
+    UI_LEFT_PANEL_WIDTH = 260
+    UI_LOG_HEIGHT = 140
+    UI_STATUS_BAR_HEIGHT = 24
+    UI_INFO_HEIGHT = 75
+    UI_PORT_WIDTH = 80
+    UI_BAUD_WIDTH = 80
+    UI_THRESHOLD_WIDTH = 40
+    UI_PARAM_WIDTH = 44

@@ -20,7 +20,7 @@ class ResultCalculator:
             return 0.0
         dt = x_data[idx] - x_data[idx - 1]
         dp = y_data[idx] - y_data[idx - 1]
-        if abs(dt) < 1e-9:
+        if abs(dt) < Config.TIME_DELTA_EPSILON:
             return 0.0
         rate = dp / dt
         if math.isinf(rate) or math.isnan(rate):
@@ -32,8 +32,8 @@ class ResultCalculator:
         x_data: List[float],
         y_data: List[float],
         idx: int = -1,
-        window: int = 3,
-        sigma: float = 2.0
+        window: int = Config.RATE_FILTER_WINDOW,
+        sigma: float = Config.RATE_FILTER_SIGMA
     ) -> float:
         """带中值滤波的速率（抗噪声）"""
         if len(x_data) < 3:
@@ -45,7 +45,7 @@ class ResultCalculator:
                 return 0.0
             dt = x_data[idx] - x_data[idx - 1]
             dp = y_data[idx] - y_data[idx - 1]
-            if abs(dt) < 1e-9:
+            if abs(dt) < Config.TIME_DELTA_EPSILON:
                 return 0.0
             rate = dp / dt
             if math.isinf(rate) or math.isnan(rate):
@@ -67,7 +67,7 @@ class ResultCalculator:
         if std == 0:
             dt = x_data[idx] - x_data[idx - 1]
             dp = y_data[idx] - y_data[idx - 1]
-            if abs(dt) < 1e-9:
+            if abs(dt) < Config.TIME_DELTA_EPSILON:
                 return 0.0
             rate = dp / dt
             if math.isinf(rate) or math.isnan(rate):
@@ -79,7 +79,7 @@ class ResultCalculator:
             # 异常值：使用窗口整体斜率
             dt = win_x[-1] - win_x[0]
             dp = win_y[-1] - win_y[0]
-            if abs(dt) < 1e-9:
+            if abs(dt) < Config.TIME_DELTA_EPSILON:
                 return 0.0
             rate = dp / dt
             if math.isinf(rate) or math.isnan(rate):
@@ -89,7 +89,7 @@ class ResultCalculator:
             # 正常值：使用瞬时差分
             dt = x_data[idx] - x_data[idx - 1]
             dp = y_data[idx] - y_data[idx - 1]
-            if abs(dt) < 1e-9:
+            if abs(dt) < Config.TIME_DELTA_EPSILON:
                 return 0.0
             rate = dp / dt
             if math.isinf(rate) or math.isnan(rate):
@@ -103,7 +103,7 @@ class ResultCalculator:
             return np.array([0.0])
         dt = np.diff(x_data)
         dp = np.diff(y_data)
-        dt = np.where(np.abs(dt) < 1e-9, 1e-6, dt)
+        dt = np.where(np.abs(dt) < Config.TIME_DELTA_EPSILON, Config.ZERO_TIME_DELTA, dt)
         rate = dp / dt
         rate = np.nan_to_num(rate, nan=0.0, posinf=0.0, neginf=0.0)
         rate = np.clip(rate, -Config.MAX_RATE_LIMIT, Config.MAX_RATE_LIMIT)
@@ -121,7 +121,7 @@ class ResultCalculator:
         prev_p: Optional[float],
         prev_v: Optional[float],
         rate_limit: float = Config.MAX_RATE_LIMIT,
-        accel_limit: float = 10000.0
+        accel_limit: float = Config.MAX_ACCELERATION_LIMIT
     ) -> Tuple[float, float, float, float]:
         """
         统一的运动学计算：根据当前时刻数据和历史状态，计算速度（一阶导）和加速度（二阶导）
@@ -146,7 +146,7 @@ class ResultCalculator:
 
         # ---- 2. 计算时间差（防止除零） ----
         dt = curr_t - prev_t
-        if abs(dt) < 1e-9:
+        if abs(dt) < Config.TIME_DELTA_EPSILON:
             # 时间没有前进，无法计算有效速度/加速度
             return curr_t, curr_p, 0.0, 0.0
 

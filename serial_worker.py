@@ -15,9 +15,9 @@ class SerialWorker(QThread):
     sig_data = Signal(float, float)
     sig_error = Signal(str)
 
-    HEARTBEAT = 0x09
-    FRAME_HEADER = 0xAA
-    FRAME_LEN = 8
+    HEARTBEAT = Config.HEARTBEAT_CMD
+    FRAME_HEADER = Config.BINARY_FRAME_HEADER
+    FRAME_LEN = Config.BINARY_FRAME_LENGTH
 
     def __init__(self, port: str, baudrate: int, device_type: str = "unknown"):
         super().__init__()
@@ -35,7 +35,12 @@ class SerialWorker(QThread):
     def run(self):
         try:
             logger.info(f"正在打开串口 {self.port} @ {self.baudrate}")
-            self.ser = serial.Serial(self.port, self.baudrate, timeout=0.5, write_timeout=0.5)
+            self.ser = serial.Serial(
+                self.port,
+                self.baudrate,
+                timeout=Config.SERIAL_READ_TIMEOUT,
+                write_timeout=Config.SERIAL_WRITE_TIMEOUT,
+            )
             self.running = True
             self.start_time = time.perf_counter()
 
@@ -66,7 +71,7 @@ class SerialWorker(QThread):
             return "text"
 
         logger.debug("设备类型 unknown，开始嗅探")
-        time.sleep(0.1)
+        time.sleep(Config.PROTOCOL_DETECT_DELAY)
         sniff_data = self._sniff_data()
         if sniff_data:
             logger.debug(f"嗅探到 {len(sniff_data)} 字节: {sniff_data[:32]}")
@@ -92,9 +97,9 @@ class SerialWorker(QThread):
             while time.time() < end_time:
                 if self.ser.in_waiting > 0:
                     sniff_data += self.ser.read(self.ser.in_waiting)
-                    if b'\n' in sniff_data or len(sniff_data) >= 64:
+                    if b'\n' in sniff_data or len(sniff_data) >= Config.PROTOCOL_SNIFF_MAX_BYTES:
                         break
-                time.sleep(0.01)
+                time.sleep(Config.PROTOCOL_SNIFF_INTERVAL)
         return sniff_data
 
     def _has_binary_control_chars(self, data: bytes) -> bool:
@@ -113,7 +118,7 @@ class SerialWorker(QThread):
                         self._emit_data(t, pressure)
                         self.sig_raw.emit(raw)
             else:
-                time.sleep(0.001)
+                time.sleep(Config.SERIAL_IDLE_INTERVAL)
 
     def _run_binary_mode(self):
         logger.info("二进制模式启动，发送压力表命令")
@@ -130,7 +135,7 @@ class SerialWorker(QThread):
                 logger.debug(f"读取到 {len(data)} 字节原始数据")
                 self._process_binary_data(data)
             else:
-                time.sleep(0.001)
+                time.sleep(Config.SERIAL_IDLE_INTERVAL)
 
     def _process_binary_data(self, data: bytes):
         logger.debug(f"_process_binary_data 处理 {len(data)} 字节")
@@ -165,7 +170,7 @@ class SerialWorker(QThread):
 
     def _parse_pressure_from_frame(self, buffer: bytearray, idx: int) -> float:
         pressure_raw = (buffer[idx + 1] << 8) | buffer[idx + 2]
-        pressure = pressure_raw * 0.01 - 10.0
+        pressure = pressure_raw * Config.PRESSURE_SCALE + Config.PRESSURE_OFFSET
         return pressure
 
     def _emit_data(self, t: float, p: float):
@@ -173,7 +178,7 @@ class SerialWorker(QThread):
         self.sig_data.emit(t, p)
 
     def _reply_heartbeat(self):
-        reply = bytes([self.HEARTBEAT, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+        reply = bytes([self.HEARTBEAT] + [0x00] * (Config.HEARTBEAT_REPLY_LENGTH - 1))
         with self.write_lock:
             if self.ser and self.ser.is_open:
                 try:
@@ -183,7 +188,7 @@ class SerialWorker(QThread):
                     pass
 
     def _send_pressure_table_command(self):
-        cmd = bytes([0x03, 0x02, 0x00])
+        cmd = bytes(Config.PRESSURE_TABLE_COMMAND)
         with self.write_lock:
             if self.ser and self.ser.is_open:
                 try:

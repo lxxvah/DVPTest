@@ -117,7 +117,7 @@ class DataController(QObject):
     def disconnect_serial(self):
         if self.worker:
             self.worker.stop_reader()
-            if not self.worker.wait(2000):
+            if not self.worker.wait(Config.AUTO_CONNECT_INTERVAL_MS):
                 logger.warning("串口线程未能正常结束，强制终止")
                 self.worker.terminate()
                 self.worker.wait()
@@ -140,7 +140,7 @@ class DataController(QObject):
                     if not self.exit_pc_mode():
                         logger.warning("退出PC界面失败，强制断开")
                     else:
-                        time.sleep(Config.DISCONNECT_DELAY if hasattr(Config, 'DISCONNECT_DELAY') else 0.2)
+                        time.sleep(Config.DISCONNECT_DELAY)
                 else:
                     logger.info("退出程序：未处于PC模式，直接断开")
             else:
@@ -149,7 +149,7 @@ class DataController(QObject):
                     if not self.send_command("AT#AH"):
                         logger.warning("发送结束命令失败，强制断开")
                     else:
-                        time.sleep(Config.DISCONNECT_DELAY if hasattr(Config, 'DISCONNECT_DELAY') else 0.2)
+                        time.sleep(Config.DISCONNECT_DELAY)
                 else:
                     logger.info("退出程序：测试未运行，直接断开")
         finally:

@@ -1,0 +1,898 @@
+2026-09-04 14:06:44,272 - DVPTest - INFO - === test_managers.py 已加载（新版本）===
+2026-09-04 14:06:44,272 - DVPTest - INFO - [TestManager] 初始化完成（完全解耦 + InflectionDetector 版）
+2026-09-04 14:06:44,555 - DVPTest - DEBUG - [UI] MainWindow 初始化完成
+2026-09-04 14:07:46,994 - DVPTest - INFO - 设备识别: unknown
+2026-09-04 14:07:46,995 - DVPTest - SUCCESS - 已连接到串口 COM25 @ 115200 bps
+2026-09-04 14:07:46,996 - DVPTest - INFO - 正在打开串口 COM25 @ 115200
+2026-09-04 14:07:46,996 - DVPTest - SUCCESS - 开始记录数据，文件: ./logs/csv\pressure_data_20260904_140746.csv
+2026-09-04 14:07:46,996 - DVPTest - DEBUG - [TestManager] reset 完成
+2026-09-04 14:07:47,000 - DVPTest - DEBUG - 充气参数更新: start=5.0, mid=200.0, target=300.0
+2026-09-04 14:07:47,001 - DVPTest - DEBUG - [UI] _connect 完成
+2026-09-04 14:07:47,006 - DVPTest - DEBUG - 设备类型 unknown，开始嗅探
+2026-09-04 14:07:47,416 - DVPTest - DEBUG - 嗅探无结果，默认文本
+2026-09-04 14:07:47,416 - DVPTest - INFO - 协议检测完成: device_type=unknown, mode=text
+2026-09-04 14:07:47,417 - DVPTest - INFO - 进入文本模式
+2026-09-04 14:07:47,419 - DVPTest - INFO - [串口] [协议选择] device_type=unknown, mode=text
+2026-09-04 14:07:48,975 - DVPTest - DEBUG - [TestManager] reset 完成
+2026-09-04 14:07:48,976 - DVPTest - DEBUG - 充气参数更新: start=5.0, mid=200.0, target=300.0
+2026-09-04 14:07:48,976 - DVPTest - DEBUG - [TestManager] reset 完成
+2026-09-04 14:07:48,977 - DVPTest - INFO - 数据已重置，绘图恢复
+2026-09-04 14:07:48,978 - DVPTest - CMD - 发送命令: AT#AG
+2026-09-04 14:07:49,001 - DVPTest - DEBUG - 发出 sig_data: t=0.024, p=0.00
+2026-09-04 14:07:49,002 - DVPTest - DEBUG - process_data: t=0.02, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,003 - DVPTest - DEBUG - 充气峰值更新: 0.0 @ 0.02s
+2026-09-04 14:07:49,003 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,003 - DVPTest - DEBUG - [UI] _on_plot_update 收到 1 个数据点
+2026-09-04 14:07:49,004 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:49,097 - DVPTest - DEBUG - 发出 sig_data: t=0.120, p=0.00
+2026-09-04 14:07:49,098 - DVPTest - DEBUG - process_data: t=0.12, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,099 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,099 - DVPTest - DEBUG - [UI] _on_plot_update 收到 2 个数据点
+2026-09-04 14:07:49,101 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:49,193 - DVPTest - DEBUG - 发出 sig_data: t=0.216, p=0.00
+2026-09-04 14:07:49,196 - DVPTest - DEBUG - process_data: t=0.22, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,197 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,198 - DVPTest - DEBUG - [UI] _on_plot_update 收到 3 个数据点
+2026-09-04 14:07:49,201 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:49,289 - DVPTest - DEBUG - 发出 sig_data: t=0.312, p=0.00
+2026-09-04 14:07:49,290 - DVPTest - DEBUG - process_data: t=0.31, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,290 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,291 - DVPTest - DEBUG - [UI] _on_plot_update 收到 4 个数据点
+2026-09-04 14:07:49,291 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:49,400 - DVPTest - DEBUG - 发出 sig_data: t=0.423, p=0.00
+2026-09-04 14:07:49,403 - DVPTest - DEBUG - process_data: t=0.42, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,404 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,406 - DVPTest - DEBUG - [UI] _on_plot_update 收到 5 个数据点
+2026-09-04 14:07:49,411 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:49,497 - DVPTest - DEBUG - 发出 sig_data: t=0.520, p=0.00
+2026-09-04 14:07:49,500 - DVPTest - DEBUG - process_data: t=0.52, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,501 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,501 - DVPTest - DEBUG - [UI] _on_plot_update 收到 6 个数据点
+2026-09-04 14:07:49,504 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:49,592 - DVPTest - DEBUG - 发出 sig_data: t=0.615, p=0.00
+2026-09-04 14:07:49,593 - DVPTest - DEBUG - process_data: t=0.61, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,594 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,594 - DVPTest - DEBUG - [UI] _on_plot_update 收到 7 个数据点
+2026-09-04 14:07:49,595 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:49,704 - DVPTest - DEBUG - 发出 sig_data: t=0.727, p=0.00
+2026-09-04 14:07:49,707 - DVPTest - DEBUG - process_data: t=0.73, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,708 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,709 - DVPTest - DEBUG - [UI] _on_plot_update 收到 8 个数据点
+2026-09-04 14:07:49,712 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:49,800 - DVPTest - DEBUG - 发出 sig_data: t=0.822, p=0.00
+2026-09-04 14:07:49,801 - DVPTest - DEBUG - process_data: t=0.82, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,802 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,803 - DVPTest - DEBUG - [UI] _on_plot_update 收到 9 个数据点
+2026-09-04 14:07:49,805 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:49,897 - DVPTest - DEBUG - 发出 sig_data: t=0.919, p=0.00
+2026-09-04 14:07:49,899 - DVPTest - DEBUG - process_data: t=0.92, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,900 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,900 - DVPTest - DEBUG - [UI] _on_plot_update 收到 10 个数据点
+2026-09-04 14:07:49,904 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:49,992 - DVPTest - DEBUG - 发出 sig_data: t=1.015, p=0.00
+2026-09-04 14:07:49,994 - DVPTest - DEBUG - process_data: t=1.02, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:49,995 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:49,997 - DVPTest - DEBUG - [UI] _on_plot_update 收到 11 个数据点
+2026-09-04 14:07:50,000 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:50,104 - DVPTest - DEBUG - 发出 sig_data: t=1.126, p=0.00
+2026-09-04 14:07:50,104 - DVPTest - DEBUG - process_data: t=1.13, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:50,104 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:50,105 - DVPTest - DEBUG - [UI] _on_plot_update 收到 12 个数据点
+2026-09-04 14:07:50,107 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:50,200 - DVPTest - DEBUG - 发出 sig_data: t=1.223, p=0.00
+2026-09-04 14:07:50,203 - DVPTest - DEBUG - process_data: t=1.22, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:50,204 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:50,204 - DVPTest - DEBUG - [UI] _on_plot_update 收到 13 个数据点
+2026-09-04 14:07:50,207 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:50,296 - DVPTest - DEBUG - 发出 sig_data: t=1.319, p=0.00
+2026-09-04 14:07:50,298 - DVPTest - DEBUG - process_data: t=1.32, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:50,299 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:50,300 - DVPTest - DEBUG - [UI] _on_plot_update 收到 14 个数据点
+2026-09-04 14:07:50,302 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:50,391 - DVPTest - DEBUG - 发出 sig_data: t=1.414, p=0.00
+2026-09-04 14:07:50,392 - DVPTest - DEBUG - process_data: t=1.41, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:50,392 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:50,393 - DVPTest - DEBUG - [UI] _on_plot_update 收到 15 个数据点
+2026-09-04 14:07:50,395 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:50,503 - DVPTest - DEBUG - 发出 sig_data: t=1.526, p=0.00
+2026-09-04 14:07:50,505 - DVPTest - DEBUG - process_data: t=1.53, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:50,506 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:50,507 - DVPTest - DEBUG - [UI] _on_plot_update 收到 16 个数据点
+2026-09-04 14:07:50,510 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:50,599 - DVPTest - DEBUG - 发出 sig_data: t=1.621, p=0.00
+2026-09-04 14:07:50,603 - DVPTest - DEBUG - process_data: t=1.62, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:50,604 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:50,606 - DVPTest - DEBUG - [UI] _on_plot_update 收到 17 个数据点
+2026-09-04 14:07:50,608 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:50,695 - DVPTest - DEBUG - 发出 sig_data: t=1.718, p=0.00
+2026-09-04 14:07:50,696 - DVPTest - DEBUG - process_data: t=1.72, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:50,697 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:50,697 - DVPTest - DEBUG - [UI] _on_plot_update 收到 18 个数据点
+2026-09-04 14:07:50,698 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:50,791 - DVPTest - DEBUG - 发出 sig_data: t=1.814, p=0.00
+2026-09-04 14:07:50,794 - DVPTest - DEBUG - process_data: t=1.81, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:50,795 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:50,796 - DVPTest - DEBUG - [UI] _on_plot_update 收到 19 个数据点
+2026-09-04 14:07:50,798 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:50,902 - DVPTest - DEBUG - 发出 sig_data: t=1.925, p=0.00
+2026-09-04 14:07:50,903 - DVPTest - DEBUG - process_data: t=1.92, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:50,904 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:50,904 - DVPTest - DEBUG - [UI] _on_plot_update 收到 20 个数据点
+2026-09-04 14:07:50,905 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:50,998 - DVPTest - DEBUG - 发出 sig_data: t=2.021, p=0.00
+2026-09-04 14:07:51,001 - DVPTest - DEBUG - process_data: t=2.02, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:51,002 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:51,002 - DVPTest - DEBUG - [UI] _on_plot_update 收到 21 个数据点
+2026-09-04 14:07:51,005 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:51,094 - DVPTest - DEBUG - 发出 sig_data: t=2.116, p=0.00
+2026-09-04 14:07:51,096 - DVPTest - DEBUG - process_data: t=2.12, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:51,096 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:51,097 - DVPTest - DEBUG - [UI] _on_plot_update 收到 22 个数据点
+2026-09-04 14:07:51,099 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:51,206 - DVPTest - DEBUG - 发出 sig_data: t=2.228, p=0.00
+2026-09-04 14:07:51,206 - DVPTest - DEBUG - process_data: t=2.23, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:51,206 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:51,207 - DVPTest - DEBUG - [UI] _on_plot_update 收到 23 个数据点
+2026-09-04 14:07:51,207 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:51,301 - DVPTest - DEBUG - 发出 sig_data: t=2.324, p=0.00
+2026-09-04 14:07:51,304 - DVPTest - DEBUG - process_data: t=2.32, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:51,305 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:51,307 - DVPTest - DEBUG - [UI] _on_plot_update 收到 24 个数据点
+2026-09-04 14:07:51,310 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:51,397 - DVPTest - DEBUG - 发出 sig_data: t=2.420, p=0.00
+2026-09-04 14:07:51,399 - DVPTest - DEBUG - process_data: t=2.42, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:51,399 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:51,401 - DVPTest - DEBUG - [UI] _on_plot_update 收到 25 个数据点
+2026-09-04 14:07:51,403 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:51,493 - DVPTest - DEBUG - 发出 sig_data: t=2.516, p=0.00
+2026-09-04 14:07:51,494 - DVPTest - DEBUG - process_data: t=2.52, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:51,494 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:51,495 - DVPTest - DEBUG - [UI] _on_plot_update 收到 26 个数据点
+2026-09-04 14:07:51,496 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:51,605 - DVPTest - DEBUG - 发出 sig_data: t=2.627, p=0.00
+2026-09-04 14:07:51,606 - DVPTest - DEBUG - process_data: t=2.63, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:51,606 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:51,606 - DVPTest - DEBUG - [UI] _on_plot_update 收到 27 个数据点
+2026-09-04 14:07:51,608 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:51,701 - DVPTest - DEBUG - 发出 sig_data: t=2.724, p=0.00
+2026-09-04 14:07:51,703 - DVPTest - DEBUG - process_data: t=2.72, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:51,703 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:51,705 - DVPTest - DEBUG - [UI] _on_plot_update 收到 28 个数据点
+2026-09-04 14:07:51,707 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:51,797 - DVPTest - DEBUG - 发出 sig_data: t=2.819, p=0.00
+2026-09-04 14:07:51,797 - DVPTest - DEBUG - process_data: t=2.82, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:51,798 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:51,800 - DVPTest - DEBUG - [UI] _on_plot_update 收到 29 个数据点
+2026-09-04 14:07:51,801 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:51,893 - DVPTest - DEBUG - 发出 sig_data: t=2.915, p=0.00
+2026-09-04 14:07:51,893 - DVPTest - DEBUG - process_data: t=2.92, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:51,894 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:51,894 - DVPTest - DEBUG - [UI] _on_plot_update 收到 30 个数据点
+2026-09-04 14:07:51,896 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:52,004 - DVPTest - DEBUG - 发出 sig_data: t=3.027, p=0.00
+2026-09-04 14:07:52,005 - DVPTest - DEBUG - process_data: t=3.03, p=0.0, v=0.000, a=0.0, phase=IDLE
+2026-09-04 14:07:52,005 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:52,006 - DVPTest - DEBUG - [UI] _on_plot_update 收到 31 个数据点
+2026-09-04 14:07:52,007 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:52,100 - DVPTest - DEBUG - 发出 sig_data: t=3.123, p=223.00
+2026-09-04 14:07:52,103 - DVPTest - DEBUG - process_data: t=3.12, p=223.0, v=2000.000, a=10000.0, phase=IDLE
+2026-09-04 14:07:52,104 - DVPTest - DEBUG - 充气峰值更新: 223.0 @ 3.12s
+2026-09-04 14:07:52,105 - DVPTest - DEBUG - 充气起始值 5.0 mmHg 到达 @ 3.12s
+2026-09-04 14:07:52,106 - DVPTest - DEBUG - 充气中间值 200.0 mmHg 到达 @ 3.12s
+2026-09-04 14:07:52,107 - DVPTest - DEBUG - 物理分类结果: INFLATING
+2026-09-04 14:07:52,109 - DVPTest - INFO - IDLE → INFLATING @ 3.12s, p=223.0
+2026-09-04 14:07:52,109 - DVPTest - DEBUG - [UI] _on_plot_update 收到 32 个数据点
+2026-09-04 14:07:52,111 - DVPTest - INFO - [串口] cuff=223 mmHg
+2026-09-04 14:07:52,197 - DVPTest - DEBUG - 发出 sig_data: t=3.220, p=383.00
+2026-09-04 14:07:52,199 - DVPTest - DEBUG - process_data: t=3.22, p=383.0, v=1658.215, a=-3542.2, phase=INFLATING
+2026-09-04 14:07:52,200 - DVPTest - DEBUG - 充气峰值更新: 383.0 @ 3.22s
+2026-09-04 14:07:52,203 - DVPTest - DEBUG - 充气目标值 300.0 mmHg 到达 @ 3.22s
+2026-09-04 14:07:52,204 - DVPTest - DEBUG - 物理分类结果: INFLATING
+2026-09-04 14:07:52,204 - DVPTest - DEBUG - [UI] _on_plot_update 收到 33 个数据点
+2026-09-04 14:07:52,208 - DVPTest - INFO - [串口] cuff=383 mmHg
+2026-09-04 14:07:52,293 - DVPTest - DEBUG - 发出 sig_data: t=3.315, p=389.00
+2026-09-04 14:07:52,293 - DVPTest - DEBUG - process_data: t=3.32, p=389.0, v=62.775, a=-10000.0, phase=INFLATING
+2026-09-04 14:07:52,293 - DVPTest - DEBUG - 充气峰值更新: 389.0 @ 3.32s
+2026-09-04 14:07:52,294 - DVPTest - DEBUG - 物理分类结果: INFLATING
+2026-09-04 14:07:52,294 - DVPTest - DEBUG - [UI] _on_plot_update 收到 34 个数据点
+2026-09-04 14:07:52,296 - DVPTest - INFO - [串口] cuff=389 mmHg
+2026-09-04 14:07:52,405 - DVPTest - DEBUG - 发出 sig_data: t=3.428, p=389.00
+2026-09-04 14:07:52,408 - DVPTest - DEBUG - process_data: t=3.43, p=389.0, v=0.000, a=-557.3, phase=INFLATING
+2026-09-04 14:07:52,409 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:52,410 - DVPTest - DEBUG - [UI] _on_plot_update 收到 35 个数据点
+2026-09-04 14:07:52,412 - DVPTest - INFO - [串口] cuff=389 mmHg
+2026-09-04 14:07:52,500 - DVPTest - DEBUG - 发出 sig_data: t=3.523, p=388.00
+2026-09-04 14:07:52,503 - DVPTest - DEBUG - process_data: t=3.52, p=388.0, v=-10.520, a=-110.7, phase=INFLATING
+2026-09-04 14:07:52,504 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:52,506 - DVPTest - DEBUG - [UI] _on_plot_update 收到 36 个数据点
+2026-09-04 14:07:52,509 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:52,596 - DVPTest - DEBUG - 发出 sig_data: t=3.618, p=388.00
+2026-09-04 14:07:52,596 - DVPTest - DEBUG - process_data: t=3.62, p=388.0, v=0.000, a=110.6, phase=INFLATING
+2026-09-04 14:07:52,597 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:52,597 - DVPTest - DEBUG - [UI] _on_plot_update 收到 37 个数据点
+2026-09-04 14:07:52,599 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:52,692 - DVPTest - DEBUG - 发出 sig_data: t=3.715, p=387.00
+2026-09-04 14:07:52,694 - DVPTest - DEBUG - process_data: t=3.72, p=387.0, v=-10.293, a=-106.0, phase=INFLATING
+2026-09-04 14:07:52,694 - DVPTest - INFO - ★ 泄气拐点确认 [持续下降]: p=388.00 @ t=3.523s, rate=-5.20
+2026-09-04 14:07:52,696 - DVPTest - SUCCESS - ★ 泄气拐点确认 [持续下降]: p=388.00 @ t=3.523s, rate=-5.20
+2026-09-04 14:07:52,697 - DVPTest - INFO - 充气结果输出（由泄气拐点触发）: {'state': 'DONE', 'start': {'value': 5.0, 'time': 3.123143599834293, 'reached': True}, 'mid': {'value': 200.0, 'time': 3.123143599834293, 'reached': True}, 'target': {'value': 300.0, 'time': 3.219632899854332, 'reached': True}, 'peak': {'value': 389.0, 'time': 3.3152118995785713}}
+2026-09-04 14:07:52,698 - DVPTest - SUCCESS - ★ 充气结果已触发（拐点）
+2026-09-04 14:07:52,699 - DVPTest - DEBUG - [UI] _on_result_text: key=inflate, text=起始值5→中间值200 时间0.00s 速率0.00mmHg/s  起始值5→目标值300 时间0.10s 速率3057.33mmHg/s
+2026-09-04 14:07:52,700 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:52,701 - DVPTest - DEBUG - [UI] _on_plot_update 收到 38 个数据点
+2026-09-04 14:07:52,702 - DVPTest - INFO - [串口] cuff=387 mmHg
+2026-09-04 14:07:52,804 - DVPTest - DEBUG - 发出 sig_data: t=3.826, p=388.00
+2026-09-04 14:07:52,805 - DVPTest - DEBUG - process_data: t=3.83, p=388.0, v=9.016, a=174.1, phase=INFLATING
+2026-09-04 14:07:52,805 - DVPTest - DEBUG - 物理分类结果: INFLATING
+2026-09-04 14:07:52,805 - DVPTest - DEBUG - [UI] _on_plot_update 收到 39 个数据点
+2026-09-04 14:07:52,807 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:52,900 - DVPTest - DEBUG - 发出 sig_data: t=3.922, p=387.00
+2026-09-04 14:07:52,900 - DVPTest - DEBUG - process_data: t=3.92, p=387.0, v=-10.383, a=-201.4, phase=INFLATING
+2026-09-04 14:07:52,902 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:52,903 - DVPTest - DEBUG - [UI] _on_plot_update 收到 40 个数据点
+2026-09-04 14:07:52,905 - DVPTest - INFO - [串口] cuff=387 mmHg
+2026-09-04 14:07:52,995 - DVPTest - DEBUG - 发出 sig_data: t=4.018, p=387.00
+2026-09-04 14:07:52,997 - DVPTest - DEBUG - process_data: t=4.02, p=387.0, v=0.000, a=109.1, phase=INFLATING
+2026-09-04 14:07:52,998 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:52,999 - DVPTest - DEBUG - [UI] _on_plot_update 收到 41 个数据点
+2026-09-04 14:07:53,001 - DVPTest - INFO - [串口] cuff=387 mmHg
+2026-09-04 14:07:53,091 - DVPTest - DEBUG - 发出 sig_data: t=4.114, p=388.00
+2026-09-04 14:07:53,091 - DVPTest - DEBUG - process_data: t=4.11, p=388.0, v=10.420, a=108.6, phase=INFLATING
+2026-09-04 14:07:53,093 - DVPTest - DEBUG - 物理分类结果: INFLATING
+2026-09-04 14:07:53,093 - DVPTest - DEBUG - [UI] _on_plot_update 收到 42 个数据点
+2026-09-04 14:07:53,094 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:53,203 - DVPTest - DEBUG - 发出 sig_data: t=4.226, p=389.00
+2026-09-04 14:07:53,205 - DVPTest - DEBUG - process_data: t=4.23, p=389.0, v=8.886, a=-13.6, phase=INFLATING
+2026-09-04 14:07:53,206 - DVPTest - DEBUG - 物理分类结果: INFLATING
+2026-09-04 14:07:53,207 - DVPTest - DEBUG - [UI] _on_plot_update 收到 43 个数据点
+2026-09-04 14:07:53,210 - DVPTest - INFO - [串口] cuff=389 mmHg
+2026-09-04 14:07:53,299 - DVPTest - DEBUG - 发出 sig_data: t=4.322, p=389.00
+2026-09-04 14:07:53,301 - DVPTest - DEBUG - process_data: t=4.32, p=389.0, v=0.000, a=-93.0, phase=INFLATING
+2026-09-04 14:07:53,302 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:53,302 - DVPTest - DEBUG - [UI] _on_plot_update 收到 44 个数据点
+2026-09-04 14:07:53,305 - DVPTest - INFO - [串口] cuff=389 mmHg
+2026-09-04 14:07:53,395 - DVPTest - DEBUG - 发出 sig_data: t=4.418, p=389.00
+2026-09-04 14:07:53,397 - DVPTest - DEBUG - process_data: t=4.42, p=389.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:53,397 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:53,397 - DVPTest - DEBUG - [UI] _on_plot_update 收到 45 个数据点
+2026-09-04 14:07:53,399 - DVPTest - INFO - [串口] cuff=389 mmHg
+2026-09-04 14:07:53,506 - DVPTest - DEBUG - 发出 sig_data: t=4.528, p=389.00
+2026-09-04 14:07:53,509 - DVPTest - DEBUG - process_data: t=4.53, p=389.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:53,510 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:53,511 - DVPTest - DEBUG - [UI] _on_plot_update 收到 46 个数据点
+2026-09-04 14:07:53,514 - DVPTest - INFO - [串口] cuff=389 mmHg
+2026-09-04 14:07:53,602 - DVPTest - DEBUG - 发出 sig_data: t=4.625, p=388.00
+2026-09-04 14:07:53,606 - DVPTest - DEBUG - process_data: t=4.63, p=388.0, v=-10.325, a=-106.6, phase=INFLATING
+2026-09-04 14:07:53,607 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:53,609 - DVPTest - DEBUG - [UI] _on_plot_update 收到 47 个数据点
+2026-09-04 14:07:53,612 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:53,698 - DVPTest - DEBUG - 发出 sig_data: t=4.720, p=388.00
+2026-09-04 14:07:53,699 - DVPTest - DEBUG - process_data: t=4.72, p=388.0, v=0.000, a=108.5, phase=INFLATING
+2026-09-04 14:07:53,700 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:53,700 - DVPTest - DEBUG - [UI] _on_plot_update 收到 48 个数据点
+2026-09-04 14:07:53,702 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:53,794 - DVPTest - DEBUG - 发出 sig_data: t=4.817, p=388.00
+2026-09-04 14:07:53,798 - DVPTest - DEBUG - process_data: t=4.82, p=388.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:53,799 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:53,801 - DVPTest - DEBUG - [UI] _on_plot_update 收到 49 个数据点
+2026-09-04 14:07:53,803 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:53,905 - DVPTest - DEBUG - 发出 sig_data: t=4.928, p=388.00
+2026-09-04 14:07:53,907 - DVPTest - DEBUG - process_data: t=4.93, p=388.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:53,907 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:53,908 - DVPTest - DEBUG - [UI] _on_plot_update 收到 50 个数据点
+2026-09-04 14:07:53,909 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:54,002 - DVPTest - DEBUG - 发出 sig_data: t=5.025, p=388.00
+2026-09-04 14:07:54,005 - DVPTest - DEBUG - process_data: t=5.02, p=388.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:54,006 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:54,008 - DVPTest - DEBUG - [UI] _on_plot_update 收到 51 个数据点
+2026-09-04 14:07:54,011 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:54,098 - DVPTest - DEBUG - 发出 sig_data: t=5.121, p=388.00
+2026-09-04 14:07:54,101 - DVPTest - DEBUG - process_data: t=5.12, p=388.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:54,102 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:54,102 - DVPTest - DEBUG - [UI] _on_plot_update 收到 52 个数据点
+2026-09-04 14:07:54,105 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:54,193 - DVPTest - DEBUG - 发出 sig_data: t=5.216, p=388.00
+2026-09-04 14:07:54,197 - DVPTest - DEBUG - process_data: t=5.22, p=388.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:54,198 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:54,198 - DVPTest - DEBUG - [UI] _on_plot_update 收到 53 个数据点
+2026-09-04 14:07:54,201 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:54,305 - DVPTest - DEBUG - 发出 sig_data: t=5.328, p=388.00
+2026-09-04 14:07:54,308 - DVPTest - DEBUG - process_data: t=5.33, p=388.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:54,309 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:54,310 - DVPTest - DEBUG - [UI] _on_plot_update 收到 54 个数据点
+2026-09-04 14:07:54,313 - DVPTest - INFO - [串口] cuff=388 mmHg
+2026-09-04 14:07:54,401 - DVPTest - DEBUG - 发出 sig_data: t=5.424, p=387.00
+2026-09-04 14:07:54,402 - DVPTest - DEBUG - process_data: t=5.42, p=387.0, v=-10.384, a=-107.8, phase=INFLATING
+2026-09-04 14:07:54,402 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:54,403 - DVPTest - DEBUG - [UI] _on_plot_update 收到 55 个数据点
+2026-09-04 14:07:54,404 - DVPTest - INFO - [串口] cuff=387 mmHg
+2026-09-04 14:07:54,498 - DVPTest - DEBUG - 发出 sig_data: t=5.520, p=387.00
+2026-09-04 14:07:54,501 - DVPTest - DEBUG - process_data: t=5.52, p=387.0, v=0.000, a=107.6, phase=INFLATING
+2026-09-04 14:07:54,502 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:54,504 - DVPTest - DEBUG - [UI] _on_plot_update 收到 56 个数据点
+2026-09-04 14:07:54,507 - DVPTest - INFO - [串口] cuff=387 mmHg
+2026-09-04 14:07:54,593 - DVPTest - DEBUG - 发出 sig_data: t=5.616, p=387.00
+2026-09-04 14:07:54,596 - DVPTest - DEBUG - process_data: t=5.62, p=387.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:54,597 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:54,599 - DVPTest - DEBUG - [UI] _on_plot_update 收到 57 个数据点
+2026-09-04 14:07:54,601 - DVPTest - INFO - [串口] cuff=387 mmHg
+2026-09-04 14:07:54,705 - DVPTest - DEBUG - 发出 sig_data: t=5.728, p=387.00
+2026-09-04 14:07:54,706 - DVPTest - DEBUG - process_data: t=5.73, p=387.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:54,707 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:54,707 - DVPTest - DEBUG - [UI] _on_plot_update 收到 58 个数据点
+2026-09-04 14:07:54,708 - DVPTest - INFO - [串口] cuff=387 mmHg
+2026-09-04 14:07:54,801 - DVPTest - DEBUG - 发出 sig_data: t=5.824, p=387.00
+2026-09-04 14:07:54,804 - DVPTest - DEBUG - process_data: t=5.82, p=387.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:54,805 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:54,807 - DVPTest - DEBUG - [UI] _on_plot_update 收到 59 个数据点
+2026-09-04 14:07:54,810 - DVPTest - INFO - [串口] cuff=387 mmHg
+2026-09-04 14:07:54,896 - DVPTest - DEBUG - 发出 sig_data: t=5.919, p=387.00
+2026-09-04 14:07:54,898 - DVPTest - DEBUG - process_data: t=5.92, p=387.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:54,899 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:54,900 - DVPTest - DEBUG - [UI] _on_plot_update 收到 60 个数据点
+2026-09-04 14:07:54,902 - DVPTest - INFO - [串口] cuff=387 mmHg
+2026-09-04 14:07:54,992 - DVPTest - DEBUG - 发出 sig_data: t=6.015, p=386.00
+2026-09-04 14:07:54,994 - DVPTest - DEBUG - process_data: t=6.01, p=386.0, v=-10.419, a=-108.6, phase=INFLATING
+2026-09-04 14:07:54,994 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:54,995 - DVPTest - DEBUG - [UI] _on_plot_update 收到 61 个数据点
+2026-09-04 14:07:54,999 - DVPTest - INFO - [串口] cuff=386 mmHg
+2026-09-04 14:07:55,104 - DVPTest - DEBUG - 发出 sig_data: t=6.127, p=385.00
+2026-09-04 14:07:55,108 - DVPTest - DEBUG - process_data: t=6.13, p=385.0, v=-8.898, a=13.5, phase=INFLATING
+2026-09-04 14:07:55,109 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:55,112 - DVPTest - DEBUG - [UI] _on_plot_update 收到 62 个数据点
+2026-09-04 14:07:55,115 - DVPTest - INFO - [串口] cuff=385 mmHg
+2026-09-04 14:07:55,200 - DVPTest - DEBUG - 发出 sig_data: t=6.223, p=385.00
+2026-09-04 14:07:55,202 - DVPTest - DEBUG - process_data: t=6.22, p=385.0, v=0.000, a=93.1, phase=INFLATING
+2026-09-04 14:07:55,202 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:55,203 - DVPTest - DEBUG - [UI] _on_plot_update 收到 63 个数据点
+2026-09-04 14:07:55,205 - DVPTest - INFO - [串口] cuff=385 mmHg
+2026-09-04 14:07:55,296 - DVPTest - DEBUG - 发出 sig_data: t=6.319, p=384.00
+2026-09-04 14:07:55,299 - DVPTest - DEBUG - process_data: t=6.32, p=384.0, v=-10.440, a=-109.0, phase=INFLATING
+2026-09-04 14:07:55,300 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:55,301 - DVPTest - DEBUG - 有效泄气迹象，下降 5.0 mmHg，计数 1/3
+2026-09-04 14:07:55,302 - DVPTest - DEBUG - [UI] _on_plot_update 收到 64 个数据点
+2026-09-04 14:07:55,306 - DVPTest - INFO - [串口] cuff=384 mmHg
+2026-09-04 14:07:55,391 - DVPTest - DEBUG - 发出 sig_data: t=6.414, p=384.00
+2026-09-04 14:07:55,392 - DVPTest - DEBUG - process_data: t=6.41, p=384.0, v=0.000, a=109.5, phase=INFLATING
+2026-09-04 14:07:55,393 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:55,393 - DVPTest - DEBUG - [UI] _on_plot_update 收到 65 个数据点
+2026-09-04 14:07:55,395 - DVPTest - INFO - [串口] cuff=384 mmHg
+2026-09-04 14:07:55,504 - DVPTest - DEBUG - 发出 sig_data: t=6.526, p=384.00
+2026-09-04 14:07:55,504 - DVPTest - DEBUG - process_data: t=6.53, p=384.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:55,504 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:55,505 - DVPTest - DEBUG - [UI] _on_plot_update 收到 66 个数据点
+2026-09-04 14:07:55,506 - DVPTest - INFO - [串口] cuff=384 mmHg
+2026-09-04 14:07:55,599 - DVPTest - DEBUG - 发出 sig_data: t=6.622, p=383.00
+2026-09-04 14:07:55,601 - DVPTest - DEBUG - process_data: t=6.62, p=383.0, v=-10.443, a=-109.1, phase=INFLATING
+2026-09-04 14:07:55,602 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:55,603 - DVPTest - DEBUG - 有效泄气迹象，下降 6.0 mmHg，计数 1/3
+2026-09-04 14:07:55,604 - DVPTest - DEBUG - [UI] _on_plot_update 收到 67 个数据点
+2026-09-04 14:07:55,606 - DVPTest - INFO - [串口] cuff=383 mmHg
+2026-09-04 14:07:55,696 - DVPTest - DEBUG - 发出 sig_data: t=6.718, p=383.00
+2026-09-04 14:07:55,698 - DVPTest - DEBUG - process_data: t=6.72, p=383.0, v=0.000, a=108.2, phase=INFLATING
+2026-09-04 14:07:55,699 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:55,700 - DVPTest - DEBUG - [UI] _on_plot_update 收到 68 个数据点
+2026-09-04 14:07:55,703 - DVPTest - INFO - [串口] cuff=383 mmHg
+2026-09-04 14:07:55,807 - DVPTest - DEBUG - 发出 sig_data: t=6.829, p=383.00
+2026-09-04 14:07:55,807 - DVPTest - DEBUG - process_data: t=6.83, p=383.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:55,808 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:55,809 - DVPTest - DEBUG - [UI] _on_plot_update 收到 69 个数据点
+2026-09-04 14:07:55,810 - DVPTest - INFO - [串口] cuff=383 mmHg
+2026-09-04 14:07:55,903 - DVPTest - DEBUG - 发出 sig_data: t=6.926, p=383.00
+2026-09-04 14:07:55,905 - DVPTest - DEBUG - process_data: t=6.93, p=383.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:55,906 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:55,907 - DVPTest - DEBUG - [UI] _on_plot_update 收到 70 个数据点
+2026-09-04 14:07:55,909 - DVPTest - INFO - [串口] cuff=383 mmHg
+2026-09-04 14:07:55,999 - DVPTest - DEBUG - 发出 sig_data: t=7.022, p=384.00
+2026-09-04 14:07:56,002 - DVPTest - DEBUG - process_data: t=7.02, p=384.0, v=10.411, a=108.4, phase=INFLATING
+2026-09-04 14:07:56,003 - DVPTest - DEBUG - 物理分类结果: INFLATING
+2026-09-04 14:07:56,005 - DVPTest - DEBUG - [UI] _on_plot_update 收到 71 个数据点
+2026-09-04 14:07:56,007 - DVPTest - INFO - [串口] cuff=384 mmHg
+2026-09-04 14:07:56,095 - DVPTest - DEBUG - 发出 sig_data: t=7.117, p=383.00
+2026-09-04 14:07:56,099 - DVPTest - DEBUG - process_data: t=7.12, p=383.0, v=-10.493, a=-219.4, phase=INFLATING
+2026-09-04 14:07:56,100 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:56,100 - DVPTest - DEBUG - 有效泄气迹象，下降 6.0 mmHg，计数 1/3
+2026-09-04 14:07:56,100 - DVPTest - DEBUG - [UI] _on_plot_update 收到 72 个数据点
+2026-09-04 14:07:56,101 - DVPTest - INFO - [串口] cuff=383 mmHg
+2026-09-04 14:07:56,206 - DVPTest - DEBUG - 发出 sig_data: t=7.229, p=383.00
+2026-09-04 14:07:56,207 - DVPTest - DEBUG - process_data: t=7.23, p=383.0, v=0.000, a=94.0, phase=INFLATING
+2026-09-04 14:07:56,208 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:56,208 - DVPTest - DEBUG - [UI] _on_plot_update 收到 73 个数据点
+2026-09-04 14:07:56,209 - DVPTest - INFO - [串口] cuff=383 mmHg
+2026-09-04 14:07:56,302 - DVPTest - DEBUG - 发出 sig_data: t=7.325, p=383.00
+2026-09-04 14:07:56,303 - DVPTest - DEBUG - process_data: t=7.32, p=383.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:56,304 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:56,305 - DVPTest - DEBUG - [UI] _on_plot_update 收到 74 个数据点
+2026-09-04 14:07:56,306 - DVPTest - INFO - [串口] cuff=383 mmHg
+2026-09-04 14:07:56,398 - DVPTest - DEBUG - 发出 sig_data: t=7.421, p=17.00
+2026-09-04 14:07:56,400 - DVPTest - DEBUG - process_data: t=7.42, p=17.0, v=-2000.000, a=-10000.0, phase=INFLATING
+2026-09-04 14:07:56,400 - DVPTest - SUCCESS - ★ 泄气起始值 300.0 mmHg 真实穿越 @ 7.42s
+2026-09-04 14:07:56,400 - DVPTest - SUCCESS - ★ 泄气中间值 200.0 mmHg 真实穿越 @ 7.42s
+2026-09-04 14:07:56,401 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:56,401 - DVPTest - DEBUG - 有效泄气迹象，下降 372.0 mmHg，计数 1/3
+2026-09-04 14:07:56,401 - DVPTest - DEBUG - [UI] _on_plot_update 收到 75 个数据点
+2026-09-04 14:07:56,403 - DVPTest - INFO - [串口] cuff=17 mmHg
+2026-09-04 14:07:56,494 - DVPTest - DEBUG - 发出 sig_data: t=7.516, p=0.00
+2026-09-04 14:07:56,494 - DVPTest - DEBUG - process_data: t=7.52, p=0.0, v=-178.275, a=10000.0, phase=INFLATING
+2026-09-04 14:07:56,495 - DVPTest - SUCCESS - ★ 泄气目标值 5.0 mmHg 真实穿越 @ 7.52s
+2026-09-04 14:07:56,495 - DVPTest - INFO - 泄气结果输出（由目标值到达触发）: {'state': 'DONE', 'start': {'value': 300.0, 'time': 7.4207692998461425, 'reached': True}, 'mid': {'value': 200.0, 'time': 7.4207692998461425, 'reached': True}, 'target': {'value': 5.0, 'time': 7.51612739963457, 'reached': True}, 'peak': {'value': 388.0, 'time': 3.5229111998341978}, 'inflection': {'value': 388.0, 'time': 3.5229111998341978, 'rate': -5.200803002348231, 'method': '持续下降'}}
+2026-09-04 14:07:56,497 - DVPTest - SUCCESS - ★ 泄气结果已触发（目标到达）
+2026-09-04 14:07:56,499 - DVPTest - DEBUG - [UI] _on_result_text: key=deflate, text=起始值300→目标值5 时间0.10s 速率3093.60mmHg/s  中间值200→目标值5 时间0.10s 速率2044.92mmHg/s
+2026-09-04 14:07:56,499 - DVPTest - DEBUG - 物理分类结果: DEFLATING
+2026-09-04 14:07:56,500 - DVPTest - DEBUG - 有效泄气迹象，下降 389.0 mmHg，计数 2/3
+2026-09-04 14:07:56,500 - DVPTest - DEBUG - [UI] _on_plot_update 收到 76 个数据点
+2026-09-04 14:07:56,501 - DVPTest - INFO - 泄气目标已到达，且压力达到 0.2 mmHg，暂停绘图更新
+2026-09-04 14:07:56,501 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:56,606 - DVPTest - DEBUG - 发出 sig_data: t=7.628, p=0.00
+2026-09-04 14:07:56,606 - DVPTest - DEBUG - process_data: t=7.63, p=0.0, v=0.000, a=1593.5, phase=INFLATING
+2026-09-04 14:07:56,607 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:56,607 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:56,702 - DVPTest - DEBUG - 发出 sig_data: t=7.725, p=0.00
+2026-09-04 14:07:56,705 - DVPTest - DEBUG - process_data: t=7.72, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:56,706 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:56,706 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:56,798 - DVPTest - DEBUG - 发出 sig_data: t=7.820, p=0.00
+2026-09-04 14:07:56,798 - DVPTest - DEBUG - process_data: t=7.82, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:56,799 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:56,799 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:56,893 - DVPTest - DEBUG - 发出 sig_data: t=7.916, p=0.00
+2026-09-04 14:07:56,899 - DVPTest - DEBUG - process_data: t=7.92, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:56,900 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:56,900 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,005 - DVPTest - DEBUG - 发出 sig_data: t=8.028, p=0.00
+2026-09-04 14:07:57,009 - DVPTest - DEBUG - process_data: t=8.03, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,010 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,012 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,101 - DVPTest - DEBUG - 发出 sig_data: t=8.123, p=0.00
+2026-09-04 14:07:57,101 - DVPTest - DEBUG - process_data: t=8.12, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,102 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,102 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,197 - DVPTest - DEBUG - 发出 sig_data: t=8.220, p=0.00
+2026-09-04 14:07:57,200 - DVPTest - DEBUG - process_data: t=8.22, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,201 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,201 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,292 - DVPTest - DEBUG - 发出 sig_data: t=8.315, p=0.00
+2026-09-04 14:07:57,295 - DVPTest - DEBUG - process_data: t=8.32, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,296 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,297 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,405 - DVPTest - DEBUG - 发出 sig_data: t=8.427, p=0.00
+2026-09-04 14:07:57,407 - DVPTest - DEBUG - process_data: t=8.43, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,407 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,408 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,501 - DVPTest - DEBUG - 发出 sig_data: t=8.524, p=0.00
+2026-09-04 14:07:57,505 - DVPTest - DEBUG - process_data: t=8.52, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,506 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,507 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,596 - DVPTest - DEBUG - 发出 sig_data: t=8.619, p=0.00
+2026-09-04 14:07:57,599 - DVPTest - DEBUG - process_data: t=8.62, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,600 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,601 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,707 - DVPTest - DEBUG - 发出 sig_data: t=8.730, p=0.00
+2026-09-04 14:07:57,708 - DVPTest - DEBUG - process_data: t=8.73, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,709 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,709 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,804 - DVPTest - DEBUG - 发出 sig_data: t=8.827, p=0.00
+2026-09-04 14:07:57,805 - DVPTest - DEBUG - process_data: t=8.83, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,805 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,806 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,900 - DVPTest - DEBUG - 发出 sig_data: t=8.923, p=0.00
+2026-09-04 14:07:57,903 - DVPTest - DEBUG - process_data: t=8.92, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,904 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,904 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:57,996 - DVPTest - DEBUG - 发出 sig_data: t=9.019, p=0.00
+2026-09-04 14:07:57,997 - DVPTest - DEBUG - process_data: t=9.02, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:57,998 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:57,999 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:58,108 - DVPTest - DEBUG - 发出 sig_data: t=9.131, p=0.00
+2026-09-04 14:07:58,111 - DVPTest - DEBUG - process_data: t=9.13, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:58,112 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:58,112 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:58,204 - DVPTest - DEBUG - 发出 sig_data: t=9.226, p=0.00
+2026-09-04 14:07:58,204 - DVPTest - DEBUG - process_data: t=9.23, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:58,205 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:58,205 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:58,299 - DVPTest - DEBUG - 发出 sig_data: t=9.322, p=0.00
+2026-09-04 14:07:58,300 - DVPTest - DEBUG - process_data: t=9.32, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:58,301 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:58,303 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:58,395 - DVPTest - DEBUG - 发出 sig_data: t=9.418, p=0.00
+2026-09-04 14:07:58,397 - DVPTest - DEBUG - process_data: t=9.42, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:58,398 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:58,400 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:58,507 - DVPTest - DEBUG - 发出 sig_data: t=9.530, p=0.00
+2026-09-04 14:07:58,508 - DVPTest - DEBUG - process_data: t=9.53, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:58,508 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:58,509 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:58,603 - DVPTest - DEBUG - 发出 sig_data: t=9.625, p=0.00
+2026-09-04 14:07:58,605 - DVPTest - DEBUG - process_data: t=9.63, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:58,606 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:58,606 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:58,699 - DVPTest - DEBUG - 发出 sig_data: t=9.722, p=0.00
+2026-09-04 14:07:58,702 - DVPTest - DEBUG - process_data: t=9.72, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:58,704 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:58,706 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:58,794 - DVPTest - DEBUG - 发出 sig_data: t=9.817, p=0.00
+2026-09-04 14:07:58,796 - DVPTest - DEBUG - process_data: t=9.82, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:58,796 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:58,797 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:58,906 - DVPTest - DEBUG - 发出 sig_data: t=9.929, p=0.00
+2026-09-04 14:07:58,909 - DVPTest - DEBUG - process_data: t=9.93, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:58,911 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:58,912 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:59,002 - DVPTest - DEBUG - 发出 sig_data: t=10.025, p=0.00
+2026-09-04 14:07:59,004 - DVPTest - DEBUG - process_data: t=10.02, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:59,004 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:59,005 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:59,098 - DVPTest - DEBUG - 发出 sig_data: t=10.121, p=0.00
+2026-09-04 14:07:59,100 - DVPTest - DEBUG - process_data: t=10.12, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:59,101 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:59,101 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:59,194 - DVPTest - DEBUG - 发出 sig_data: t=10.217, p=0.00
+2026-09-04 14:07:59,197 - DVPTest - DEBUG - process_data: t=10.22, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:59,198 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:59,198 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:59,306 - DVPTest - DEBUG - 发出 sig_data: t=10.328, p=0.00
+2026-09-04 14:07:59,307 - DVPTest - DEBUG - process_data: t=10.33, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:59,308 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:59,308 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:59,402 - DVPTest - DEBUG - 发出 sig_data: t=10.424, p=0.00
+2026-09-04 14:07:59,404 - DVPTest - DEBUG - process_data: t=10.42, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:59,404 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:59,406 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:59,497 - DVPTest - DEBUG - 发出 sig_data: t=10.520, p=0.00
+2026-09-04 14:07:59,500 - DVPTest - DEBUG - process_data: t=10.52, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:59,501 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:59,503 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:59,593 - DVPTest - DEBUG - 发出 sig_data: t=10.616, p=0.00
+2026-09-04 14:07:59,594 - DVPTest - DEBUG - process_data: t=10.62, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:59,595 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:59,595 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:59,706 - DVPTest - DEBUG - 发出 sig_data: t=10.728, p=0.00
+2026-09-04 14:07:59,706 - DVPTest - DEBUG - process_data: t=10.73, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:59,707 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:59,707 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:59,801 - DVPTest - DEBUG - 发出 sig_data: t=10.824, p=0.00
+2026-09-04 14:07:59,803 - DVPTest - DEBUG - process_data: t=10.82, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:59,804 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:59,805 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:07:59,897 - DVPTest - DEBUG - 发出 sig_data: t=10.920, p=0.00
+2026-09-04 14:07:59,900 - DVPTest - DEBUG - process_data: t=10.92, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:07:59,900 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:07:59,901 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:00,008 - DVPTest - DEBUG - 发出 sig_data: t=11.031, p=0.00
+2026-09-04 14:08:00,009 - DVPTest - DEBUG - process_data: t=11.03, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:00,010 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:00,010 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:00,105 - DVPTest - DEBUG - 发出 sig_data: t=11.127, p=0.00
+2026-09-04 14:08:00,105 - DVPTest - DEBUG - process_data: t=11.13, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:00,105 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:00,105 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:00,201 - DVPTest - DEBUG - 发出 sig_data: t=11.224, p=0.00
+2026-09-04 14:08:00,203 - DVPTest - DEBUG - process_data: t=11.22, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:00,203 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:00,204 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:00,297 - DVPTest - DEBUG - 发出 sig_data: t=11.320, p=0.00
+2026-09-04 14:08:00,299 - DVPTest - DEBUG - process_data: t=11.32, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:00,299 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:00,299 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:00,408 - DVPTest - DEBUG - 发出 sig_data: t=11.430, p=0.00
+2026-09-04 14:08:00,408 - DVPTest - DEBUG - process_data: t=11.43, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:00,408 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:00,408 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:00,505 - DVPTest - DEBUG - 发出 sig_data: t=11.527, p=0.00
+2026-09-04 14:08:00,506 - DVPTest - DEBUG - process_data: t=11.53, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:00,506 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:00,506 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:00,601 - DVPTest - DEBUG - 发出 sig_data: t=11.623, p=0.00
+2026-09-04 14:08:00,601 - DVPTest - DEBUG - process_data: t=11.62, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:00,601 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:00,601 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:00,696 - DVPTest - DEBUG - 发出 sig_data: t=11.719, p=0.00
+2026-09-04 14:08:00,697 - DVPTest - DEBUG - process_data: t=11.72, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:00,698 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:00,699 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:00,808 - DVPTest - DEBUG - 发出 sig_data: t=11.830, p=0.00
+2026-09-04 14:08:00,809 - DVPTest - DEBUG - process_data: t=11.83, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:00,810 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:00,811 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:00,904 - DVPTest - DEBUG - 发出 sig_data: t=11.926, p=0.00
+2026-09-04 14:08:00,906 - DVPTest - DEBUG - process_data: t=11.93, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:00,906 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:00,906 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:01,000 - DVPTest - DEBUG - 发出 sig_data: t=12.022, p=0.00
+2026-09-04 14:08:01,000 - DVPTest - DEBUG - process_data: t=12.02, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:01,000 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:01,000 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:01,096 - DVPTest - DEBUG - 发出 sig_data: t=12.118, p=0.00
+2026-09-04 14:08:01,097 - DVPTest - DEBUG - process_data: t=12.12, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:01,097 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:01,097 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:01,207 - DVPTest - DEBUG - 发出 sig_data: t=12.229, p=0.00
+2026-09-04 14:08:01,207 - DVPTest - DEBUG - process_data: t=12.23, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:01,207 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:01,209 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:01,303 - DVPTest - DEBUG - 发出 sig_data: t=12.326, p=0.00
+2026-09-04 14:08:01,304 - DVPTest - DEBUG - process_data: t=12.33, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:01,305 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:01,305 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:01,399 - DVPTest - DEBUG - 发出 sig_data: t=12.421, p=0.00
+2026-09-04 14:08:01,399 - DVPTest - DEBUG - process_data: t=12.42, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:01,399 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:01,399 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:01,495 - DVPTest - DEBUG - 发出 sig_data: t=12.517, p=0.00
+2026-09-04 14:08:01,495 - DVPTest - DEBUG - process_data: t=12.52, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:01,495 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:01,495 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:01,606 - DVPTest - DEBUG - 发出 sig_data: t=12.629, p=0.00
+2026-09-04 14:08:01,607 - DVPTest - DEBUG - process_data: t=12.63, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:01,607 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:01,607 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:01,703 - DVPTest - DEBUG - 发出 sig_data: t=12.725, p=0.00
+2026-09-04 14:08:01,703 - DVPTest - DEBUG - process_data: t=12.73, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:01,703 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:01,703 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:01,798 - DVPTest - DEBUG - 发出 sig_data: t=12.820, p=0.00
+2026-09-04 14:08:01,799 - DVPTest - DEBUG - process_data: t=12.82, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:01,799 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:01,799 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:01,909 - DVPTest - DEBUG - 发出 sig_data: t=12.932, p=0.00
+2026-09-04 14:08:01,910 - DVPTest - DEBUG - process_data: t=12.93, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:01,911 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:01,913 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,006 - DVPTest - DEBUG - 发出 sig_data: t=13.028, p=0.00
+2026-09-04 14:08:02,006 - DVPTest - DEBUG - process_data: t=13.03, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,006 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,006 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,102 - DVPTest - DEBUG - 发出 sig_data: t=13.124, p=0.00
+2026-09-04 14:08:02,104 - DVPTest - DEBUG - process_data: t=13.12, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,104 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,105 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,197 - DVPTest - DEBUG - 发出 sig_data: t=13.220, p=0.00
+2026-09-04 14:08:02,198 - DVPTest - DEBUG - process_data: t=13.22, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,198 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,200 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,310 - DVPTest - DEBUG - 发出 sig_data: t=13.332, p=0.00
+2026-09-04 14:08:02,310 - DVPTest - DEBUG - process_data: t=13.33, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,311 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,311 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,405 - DVPTest - DEBUG - 发出 sig_data: t=13.427, p=0.00
+2026-09-04 14:08:02,406 - DVPTest - DEBUG - process_data: t=13.43, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,406 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,407 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,501 - DVPTest - DEBUG - 发出 sig_data: t=13.523, p=0.00
+2026-09-04 14:08:02,501 - DVPTest - DEBUG - process_data: t=13.52, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,501 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,502 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,597 - DVPTest - DEBUG - 发出 sig_data: t=13.620, p=0.00
+2026-09-04 14:08:02,599 - DVPTest - DEBUG - process_data: t=13.62, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,599 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,601 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,709 - DVPTest - DEBUG - 发出 sig_data: t=13.731, p=0.00
+2026-09-04 14:08:02,709 - DVPTest - DEBUG - process_data: t=13.73, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,710 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,710 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,804 - DVPTest - DEBUG - 发出 sig_data: t=13.827, p=0.00
+2026-09-04 14:08:02,805 - DVPTest - DEBUG - process_data: t=13.83, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,805 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,805 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,901 - DVPTest - DEBUG - 发出 sig_data: t=13.924, p=0.00
+2026-09-04 14:08:02,902 - DVPTest - DEBUG - process_data: t=13.92, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,902 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,903 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:02,997 - DVPTest - DEBUG - 发出 sig_data: t=14.019, p=0.00
+2026-09-04 14:08:02,998 - DVPTest - DEBUG - process_data: t=14.02, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:02,998 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:02,998 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:03,109 - DVPTest - DEBUG - 发出 sig_data: t=14.131, p=0.00
+2026-09-04 14:08:03,109 - DVPTest - DEBUG - process_data: t=14.13, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:03,109 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:03,109 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:03,204 - DVPTest - DEBUG - 发出 sig_data: t=14.226, p=0.00
+2026-09-04 14:08:03,205 - DVPTest - DEBUG - process_data: t=14.23, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:03,205 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:03,206 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:03,300 - DVPTest - DEBUG - 发出 sig_data: t=14.322, p=0.00
+2026-09-04 14:08:03,301 - DVPTest - DEBUG - process_data: t=14.32, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:03,302 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:03,302 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:03,395 - DVPTest - DEBUG - 发出 sig_data: t=14.417, p=0.00
+2026-09-04 14:08:03,396 - DVPTest - DEBUG - process_data: t=14.42, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:03,396 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:03,396 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:03,507 - DVPTest - DEBUG - 发出 sig_data: t=14.530, p=0.00
+2026-09-04 14:08:03,510 - DVPTest - DEBUG - process_data: t=14.53, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:03,511 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:03,511 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:03,603 - DVPTest - DEBUG - 发出 sig_data: t=14.626, p=0.00
+2026-09-04 14:08:03,604 - DVPTest - DEBUG - process_data: t=14.63, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:03,604 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:03,604 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:03,700 - DVPTest - DEBUG - 发出 sig_data: t=14.722, p=0.00
+2026-09-04 14:08:03,700 - DVPTest - DEBUG - process_data: t=14.72, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:03,700 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:03,700 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:03,811 - DVPTest - DEBUG - 发出 sig_data: t=14.833, p=0.00
+2026-09-04 14:08:03,812 - DVPTest - DEBUG - process_data: t=14.83, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:03,812 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:03,812 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:03,907 - DVPTest - DEBUG - 发出 sig_data: t=14.930, p=0.00
+2026-09-04 14:08:03,908 - DVPTest - DEBUG - process_data: t=14.93, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:03,909 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:03,909 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:04,003 - DVPTest - DEBUG - 发出 sig_data: t=15.025, p=0.00
+2026-09-04 14:08:04,005 - DVPTest - DEBUG - process_data: t=15.03, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:04,005 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:04,006 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:04,099 - DVPTest - DEBUG - 发出 sig_data: t=15.121, p=0.00
+2026-09-04 14:08:04,099 - DVPTest - DEBUG - process_data: t=15.12, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:04,099 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:04,099 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:04,210 - DVPTest - DEBUG - 发出 sig_data: t=15.232, p=0.00
+2026-09-04 14:08:04,210 - DVPTest - DEBUG - process_data: t=15.23, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:04,210 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:04,210 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:04,306 - DVPTest - DEBUG - 发出 sig_data: t=15.329, p=0.00
+2026-09-04 14:08:04,307 - DVPTest - DEBUG - process_data: t=15.33, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:04,307 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:04,307 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:04,402 - DVPTest - DEBUG - 发出 sig_data: t=15.424, p=0.00
+2026-09-04 14:08:04,403 - DVPTest - DEBUG - process_data: t=15.42, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:04,403 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:04,403 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:04,498 - DVPTest - DEBUG - 发出 sig_data: t=15.520, p=0.00
+2026-09-04 14:08:04,499 - DVPTest - DEBUG - process_data: t=15.52, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:04,499 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:04,499 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:04,609 - DVPTest - DEBUG - 发出 sig_data: t=15.632, p=0.00
+2026-09-04 14:08:04,611 - DVPTest - DEBUG - process_data: t=15.63, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:04,612 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:04,613 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:04,706 - DVPTest - DEBUG - 发出 sig_data: t=15.728, p=0.00
+2026-09-04 14:08:04,707 - DVPTest - DEBUG - process_data: t=15.73, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:04,707 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:04,707 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:04,802 - DVPTest - DEBUG - 发出 sig_data: t=15.824, p=0.00
+2026-09-04 14:08:04,803 - DVPTest - DEBUG - process_data: t=15.82, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:04,803 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:04,803 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:04,897 - DVPTest - DEBUG - 发出 sig_data: t=15.920, p=0.00
+2026-09-04 14:08:04,899 - DVPTest - DEBUG - process_data: t=15.92, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:04,899 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:04,900 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:05,010 - DVPTest - DEBUG - 发出 sig_data: t=16.032, p=0.00
+2026-09-04 14:08:05,011 - DVPTest - DEBUG - process_data: t=16.03, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:05,011 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:05,011 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:05,105 - DVPTest - DEBUG - 发出 sig_data: t=16.128, p=0.00
+2026-09-04 14:08:05,106 - DVPTest - DEBUG - process_data: t=16.13, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:05,106 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:05,106 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:05,201 - DVPTest - DEBUG - 发出 sig_data: t=16.224, p=0.00
+2026-09-04 14:08:05,203 - DVPTest - DEBUG - process_data: t=16.22, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:05,203 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:05,203 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:05,297 - DVPTest - DEBUG - 发出 sig_data: t=16.319, p=0.00
+2026-09-04 14:08:05,298 - DVPTest - DEBUG - process_data: t=16.32, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:05,298 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:05,299 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:05,408 - DVPTest - DEBUG - 发出 sig_data: t=16.431, p=0.00
+2026-09-04 14:08:05,408 - DVPTest - DEBUG - process_data: t=16.43, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:05,408 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:05,408 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:05,505 - DVPTest - DEBUG - 发出 sig_data: t=16.528, p=0.00
+2026-09-04 14:08:05,506 - DVPTest - DEBUG - process_data: t=16.53, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:05,506 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:05,507 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:05,600 - DVPTest - DEBUG - 发出 sig_data: t=16.623, p=0.00
+2026-09-04 14:08:05,601 - DVPTest - DEBUG - process_data: t=16.62, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:05,601 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:05,601 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:05,696 - DVPTest - DEBUG - 发出 sig_data: t=16.719, p=0.00
+2026-09-04 14:08:05,698 - DVPTest - DEBUG - process_data: t=16.72, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:05,698 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:05,699 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:05,808 - DVPTest - DEBUG - 发出 sig_data: t=16.830, p=0.00
+2026-09-04 14:08:05,808 - DVPTest - DEBUG - process_data: t=16.83, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:05,809 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:05,809 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:05,904 - DVPTest - DEBUG - 发出 sig_data: t=16.926, p=0.00
+2026-09-04 14:08:05,905 - DVPTest - DEBUG - process_data: t=16.93, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:05,905 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:05,906 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:06,000 - DVPTest - DEBUG - 发出 sig_data: t=17.023, p=0.00
+2026-09-04 14:08:06,002 - DVPTest - DEBUG - process_data: t=17.02, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:06,002 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:06,003 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:06,111 - DVPTest - DEBUG - 发出 sig_data: t=17.134, p=0.00
+2026-09-04 14:08:06,112 - DVPTest - DEBUG - process_data: t=17.13, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:06,112 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:06,112 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:06,208 - DVPTest - DEBUG - 发出 sig_data: t=17.230, p=0.00
+2026-09-04 14:08:06,209 - DVPTest - DEBUG - process_data: t=17.23, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:06,209 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:06,209 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:06,304 - DVPTest - DEBUG - 发出 sig_data: t=17.326, p=0.00
+2026-09-04 14:08:06,305 - DVPTest - DEBUG - process_data: t=17.33, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:06,305 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:06,306 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:06,400 - DVPTest - DEBUG - 发出 sig_data: t=17.422, p=0.00
+2026-09-04 14:08:06,400 - DVPTest - DEBUG - process_data: t=17.42, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:06,400 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:06,400 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:06,511 - DVPTest - DEBUG - 发出 sig_data: t=17.533, p=0.00
+2026-09-04 14:08:06,512 - DVPTest - DEBUG - process_data: t=17.53, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:06,512 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:06,513 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:06,607 - DVPTest - DEBUG - 发出 sig_data: t=17.629, p=0.00
+2026-09-04 14:08:06,608 - DVPTest - DEBUG - process_data: t=17.63, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:06,608 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:06,608 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:06,703 - DVPTest - DEBUG - 发出 sig_data: t=17.725, p=0.00
+2026-09-04 14:08:06,705 - DVPTest - DEBUG - process_data: t=17.73, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:06,705 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:06,705 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:06,798 - DVPTest - DEBUG - 发出 sig_data: t=17.821, p=0.00
+2026-09-04 14:08:06,801 - DVPTest - DEBUG - process_data: t=17.82, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:06,802 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:06,802 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:06,911 - DVPTest - DEBUG - 发出 sig_data: t=17.933, p=0.00
+2026-09-04 14:08:06,911 - DVPTest - DEBUG - process_data: t=17.93, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:06,911 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:06,911 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:07,007 - DVPTest - DEBUG - 发出 sig_data: t=18.029, p=0.00
+2026-09-04 14:08:07,007 - DVPTest - DEBUG - process_data: t=18.03, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:07,007 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:07,007 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:07,103 - DVPTest - DEBUG - 发出 sig_data: t=18.125, p=0.00
+2026-09-04 14:08:07,104 - DVPTest - DEBUG - process_data: t=18.13, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:07,104 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:07,105 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:07,198 - DVPTest - DEBUG - 发出 sig_data: t=18.220, p=0.00
+2026-09-04 14:08:07,198 - DVPTest - DEBUG - process_data: t=18.22, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:07,198 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:07,198 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:07,310 - DVPTest - DEBUG - 发出 sig_data: t=18.332, p=0.00
+2026-09-04 14:08:07,310 - DVPTest - DEBUG - process_data: t=18.33, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:07,311 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:07,311 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:07,405 - DVPTest - DEBUG - 发出 sig_data: t=18.428, p=0.00
+2026-09-04 14:08:07,408 - DVPTest - DEBUG - process_data: t=18.43, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:07,408 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:07,408 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:07,502 - DVPTest - DEBUG - 发出 sig_data: t=18.524, p=0.00
+2026-09-04 14:08:07,502 - DVPTest - DEBUG - process_data: t=18.52, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:07,502 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:07,502 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:07,597 - DVPTest - DEBUG - 发出 sig_data: t=18.620, p=0.00
+2026-09-04 14:08:07,598 - DVPTest - DEBUG - process_data: t=18.62, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:07,598 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:07,598 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:07,709 - DVPTest - DEBUG - 发出 sig_data: t=18.732, p=0.00
+2026-09-04 14:08:07,710 - DVPTest - DEBUG - process_data: t=18.73, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:07,710 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:07,710 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:07,805 - DVPTest - DEBUG - 发出 sig_data: t=18.827, p=0.00
+2026-09-04 14:08:07,806 - DVPTest - DEBUG - process_data: t=18.83, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:07,806 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:07,806 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:07,901 - DVPTest - DEBUG - 发出 sig_data: t=18.923, p=0.00
+2026-09-04 14:08:07,902 - DVPTest - DEBUG - process_data: t=18.92, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:07,903 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:07,903 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:08,012 - DVPTest - DEBUG - 发出 sig_data: t=19.035, p=0.00
+2026-09-04 14:08:08,013 - DVPTest - DEBUG - process_data: t=19.03, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:08,013 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:08,013 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:08,109 - DVPTest - DEBUG - 发出 sig_data: t=19.131, p=0.00
+2026-09-04 14:08:08,205 - DVPTest - DEBUG - 发出 sig_data: t=19.227, p=0.00
+2026-09-04 14:08:08,231 - DVPTest - DEBUG - process_data: t=19.13, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:08,231 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:08,231 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:08,232 - DVPTest - DEBUG - process_data: t=19.23, p=0.0, v=0.000, a=0.0, phase=INFLATING
+2026-09-04 14:08:08,232 - DVPTest - DEBUG - 物理分类结果: STABLE
+2026-09-04 14:08:08,232 - DVPTest - INFO - [串口] cuff=0 mmHg
+2026-09-04 14:08:08,232 - DVPTest - INFO - 退出程序：结束测试...
+2026-09-04 14:08:08,560 - DVPTest - INFO - run() 结束
+2026-09-04 14:08:08,562 - DVPTest - DEBUG - [TestManager] reset 完成
+2026-09-04 14:08:08,562 - DVPTest - INFO - 数据已重置，绘图恢复
+2026-09-04 14:08:08,562 - DVPTest - SUCCESS - 已断开串口

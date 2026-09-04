@@ -1,0 +1,3 @@
+2026-09-04 13:07:56,970 - DVPTest - INFO - === test_managers.py 已加载（新版本）===
+2026-09-04 13:07:56,971 - DVPTest - INFO - [TestManager] 初始化完成（完全解耦 + InflectionDetector 版）
+2026-09-04 13:07:58,148 - DVPTest - DEBUG - [UI] MainWindow 初始化完成

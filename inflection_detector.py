@@ -17,6 +17,7 @@
 
 import logging
 from typing import Optional, Tuple, Dict, List
+from config import Config
 
 logger = logging.getLogger("DVPTest")
 
@@ -88,26 +89,26 @@ class InflectionDetector:
         self._rate.append(signed_rate)
         self._accel.append(acceleration)
         
-        if len(self._p) > 10:
+        if len(self._p) > Config.INFLECTION_HISTORY_SIZE:
             self._p.pop(0)
             self._t.pop(0)
             self._rate.pop(0)
             self._accel.pop(0)
         
         # 至少需要4个点做趋势判断
-        if len(self._p) < 4:
+        if len(self._p) < Config.INFLECTION_MIN_POINTS:
             return None
         
         # ---- 3. 计算趋势指标 ----
         p0, p1, p2, p3 = self._p[-4], self._p[-3], self._p[-2], self._p[-1]
         t0, t1, t2, t3 = self._t[-4], self._t[-3], self._t[-2], self._t[-1]
         
-        if t3 - t0 > 0.001:
+        if t3 - t0 > Config.INFLECTION_MIN_TIME_DELTA:
             slope_4 = (p3 - p0) / (t3 - t0)
         else:
             slope_4 = 0.0
         
-        if t3 - t1 > 0.001:
+        if t3 - t1 > Config.INFLECTION_MIN_TIME_DELTA:
             slope_3 = (p3 - p1) / (t3 - t1)
         else:
             slope_3 = 0.0
@@ -120,7 +121,9 @@ class InflectionDetector:
         result = None
         
         # ---- 4.1 漏气检测（抑制误触发） ----
-        if distance_to_peak < 2.0 and -1.0 < current_rate < -0.05:
+        if (distance_to_peak < Config.INFLECTION_LEAK_PEAK_DISTANCE
+            and Config.INFLECTION_SLOW_LEAK_RATE_MIN < current_rate
+            < Config.INFLECTION_SLOW_LEAK_RATE_MAX):
             if not self._slow_leak_detected:
                 self._slow_leak_detected = True
                 self._slow_leak_start = (t, p)
@@ -130,7 +133,10 @@ class InflectionDetector:
             else:
                 start_t, _ = self._slow_leak_start
                 self._slow_leak_duration = t - start_t
-                self._leak_rate_avg = self._leak_rate_avg * 0.8 + current_rate * 0.2
+                self._leak_rate_avg = (
+                    self._leak_rate_avg * Config.INFLECTION_LEAK_AVERAGE_WEIGHT
+                    + current_rate * Config.INFLECTION_LEAK_CURRENT_WEIGHT
+                )
             
             # 漏气期间重置候选
             self._candidate = None
@@ -140,12 +146,14 @@ class InflectionDetector:
             return None
         
         # ---- 4.2 从漏气状态转换到主动泄气 ----
-        if self._slow_leak_detected and current_rate < -1.0:
+        if self._slow_leak_detected and current_rate < Config.INFLECTION_ACTIVE_FROM_LEAK_RATE:
             logger.debug(f"[主动泄气] 从漏气状态转换 @ {t:.2f}s, rate={current_rate:.2f}")
             result = self._confirm(t, p, current_rate, "主动泄气(漏气后)")
         
         # ---- 4.3 正常主动泄气检测（速率+加速度） ----
-        if result is None and current_rate < -0.5 and current_accel < -5.0 and distance_to_peak > 0.2:
+        if (result is None and current_rate < Config.INFLECTION_ACTIVE_RATE
+            and current_accel < Config.INFLECTION_ACTIVE_ACCELERATION
+            and distance_to_peak > Config.INFLECTION_ACTIVE_PEAK_DISTANCE):
             if self._candidate is None:
                 self._candidate = (t, p, current_rate)
                 self._candidate_count = 1
@@ -157,12 +165,13 @@ class InflectionDetector:
                     self._candidate = (t, p, current_rate)
                     self._candidate_count = 1
             
-            if self._candidate_count >= 2:
+            if self._candidate_count >= Config.INFLECTION_CANDIDATE_COUNT:
                 cand_t, cand_p, cand_rate = self._candidate
                 result = self._confirm(cand_t, cand_p, cand_rate, "速率+加速度")
         
         # ---- 4.4 仅速率持续下降（加速度不明显） ----
-        if result is None and current_rate < -0.3 and distance_to_peak > 0.2:
+        if (result is None and current_rate < Config.INFLECTION_CONTINUOUS_RATE
+            and distance_to_peak > Config.INFLECTION_ACTIVE_PEAK_DISTANCE):
             if self._active_start is None:
                 self._active_start = (t, p)
                 self._active_count = 1
@@ -170,7 +179,8 @@ class InflectionDetector:
                 start_t, start_p = self._active_start
                 if p < start_p:
                     self._active_count += 1
-                    if (start_p - p) > 0.3 or self._active_count >= 3:
+                    if ((start_p - p) > Config.INFLECTION_CONTINUOUS_DROP
+                            or self._active_count >= Config.INFLECTION_ACTIVE_COUNT):
                         result = self._confirm(
                             start_t, start_p,
                             (p - start_p) / (t - start_t),
@@ -181,10 +191,11 @@ class InflectionDetector:
                     self._active_count = 1
         
         # ---- 4.5 连续3点下降（最灵敏） ----
-        if result is None and len(self._p) >= 4:
+        if result is None and len(self._p) >= Config.INFLECTION_MIN_POINTS:
             if p1 < p0 and p2 < p1 and p3 < p2:
                 total_drop = p0 - p3
-                if total_drop > 0.15 and distance_to_peak > 0:
+                if (total_drop > Config.INFLECTION_TOTAL_DROP
+                    and distance_to_peak > Config.INFLECTION_CONTINUOUS_PEAK_DISTANCE):
                     result = self._confirm(
                         t1, p1,
                         (p3 - p0) / (t3 - t0),
@@ -192,13 +203,14 @@ class InflectionDetector:
                     )
         
         # ---- 5. 重置机制 ----
-        if current_rate > 0.05:
+        if current_rate > Config.INFLECTION_RISING_RATE:
             self._candidate = None
             self._candidate_count = 0
             self._active_start = None
             self._active_count = 0
             
-            if distance_to_peak < 0.5 and current_rate > -0.05:
+            if (distance_to_peak < Config.INFLECTION_RESET_PEAK_DISTANCE
+                    and current_rate > Config.INFLECTION_RATE_EPSILON):
                 self._slow_leak_detected = False
                 self._slow_leak_start = None
         

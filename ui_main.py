@@ -3,12 +3,7 @@
 import sys
 import os
 import math
-import html
 import logging
-from collections import deque
-from dataclasses import dataclass
-from typing import Optional
-from enum import IntEnum
 
 from PySide6.QtCore import (
     QObject, Signal, Slot, QThread, Qt, QRectF, QEvent, QTimer, QSettings
@@ -29,146 +24,16 @@ from data_controller import DataController
 from result_calculator import ResultCalculator
 from test_managers import TestPhase
 from logger import _bridge   # 导入全局桥接
+from ui_components import LogWidget, UIState, UITestState, UITheme, MainWindowUiMixin
 
 # ---------- 日志记录器 ----------
 logger = logging.getLogger("DVPTest")
 
-# ---------- UI 状态枚举 ----------
-class UITestState(IntEnum):
-    IDLE = 0
-    RUNNING = 1
-    FINISHED = 2
-
-# ---------- 日志组件 ----------
-class LogWidget(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setStyleSheet("background-color: #0d1117;")
-        self.log_entries = deque(maxlen=Config.MAX_LOG_ENTRIES)
-        self.filter_level = "全部"
-        self.setup_ui()
-
-    def setup_ui(self):
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-        filter_bar = QHBoxLayout()
-        filter_bar.setContentsMargins(4, 2, 4, 2)
-        filter_bar.setSpacing(4)
-        self.filter_btns = []
-        for label in ["全部", "info", "success", "warning", "error", "cmd"]:
-            btn = QPushButton(label)
-            btn.setCheckable(True)
-            btn.setAutoExclusive(True)
-            btn.setStyleSheet("""
-                QPushButton { background-color: transparent; border: none; padding: 0 4px; font-size: 12px; color: #8b949e; }
-                QPushButton:checked { color: #c9d1d9; background-color: #21262d; border-radius: 2px; }
-                QPushButton:hover { color: #c9d1d9; }
-            """)
-            btn.clicked.connect(lambda checked, l=label: self._on_filter_clicked(l))
-            filter_bar.addWidget(btn)
-            self.filter_btns.append(btn)
-        self.filter_btns[0].setChecked(True)
-        filter_bar.addStretch()
-        layout.addLayout(filter_bar)
-        self.text_log = QTextEdit()
-        self.text_log.setReadOnly(True)
-        self.text_log.setStyleSheet("""
-            QTextEdit {
-                background-color: #0d1117; color: #c9d1d9;
-                border: none; font-family: Consolas; font-size: 11pt;
-            }
-        """)
-        layout.addWidget(self.text_log)
-
-    def _on_filter_clicked(self, text: str):
-        self.filter_level = text
-        self._refresh_display()
-
-    def append_log(self, msg: str, level: str = "info"):
-        # 识别连接/断开消息，显示为 connect 标签
-        if level == "info" and (msg.startswith("已连接到") or msg.startswith("已断开")):
-            display_level = "connect"
-        else:
-            display_level = level
-        self.log_entries.append((msg, level, display_level))
-        if self._should_show(level):
-            self._append_one(msg, display_level)
-
-    def _should_show(self, level: str) -> bool:
-        if self.filter_level == "全部":
-            return True
-        return self.filter_level == level
-
-    def _refresh_display(self):
-        self.text_log.clear()
-        for msg, level, display_level in self.log_entries:
-            if self._should_show(level):
-                self._append_one(msg, display_level)
-
-    def _append_one(self, msg: str, display_level: str):
-        from utils import get_timestamp
-        level_labels = {
-            'info': '[info]',
-            'success': '[success]',
-            'warning': '[warning]',
-            'error': '[error]',
-            'cmd': '[cmd]',
-            'debug': '[debug]',
-            'connect': '[连接]',
-        }
-        label = level_labels.get(display_level, f'[{display_level}]')
-        colors = {
-            'info': '#c9d1d9', 'success': '#3fb950',
-            'warning': '#d29922', 'error': '#f85149',
-            'cmd': '#58a6ff', 'debug': '#8b949e',
-            'connect': '#c9d1d9',
-        }
-        color = colors.get(display_level, '#c9d1d9')
-        safe_msg = html.escape(msg)
-        html_text = f'<span style="color:#8b949e;">[{get_timestamp()}]</span> <span style="color:{color};">{label} {safe_msg}</span>'
-        self.text_log.append(html_text)
-
-# ---------- UI 状态 ----------
-@dataclass
-class UIState:
-    plot_widget: Optional[pg.PlotWidget] = None
-    curve_pressure: Optional[pg.PlotDataItem] = None
-    curve_rate: Optional[pg.PlotDataItem] = None
-    label_status: Optional[QLabel] = None
-    label_rate: Optional[QLabel] = None
-    label_inflate: Optional[QLabel] = None
-    label_deflate: Optional[QLabel] = None
-    btn_connect: Optional[QPushButton] = None
-    btn_disconnect: Optional[QPushButton] = None
-    btn_start: Optional[QPushButton] = None
-    btn_stop: Optional[QPushButton] = None
-    btn_toggle_rate: Optional[QPushButton] = None
-    btn_toggle_plot: Optional[QPushButton] = None
-    btn_lock_view: Optional[QPushButton] = None
-    combo_port: Optional[QComboBox] = None
-    combo_baud: Optional[QComboBox] = None
-    inflate_start_edit: Optional[QLineEdit] = None
-    inflate_mid_edit: Optional[QLineEdit] = None
-    inflate_target_edit: Optional[QLineEdit] = None
-    deflate_start_edit: Optional[QLineEdit] = None
-    deflate_mid_edit: Optional[QLineEdit] = None
-    deflate_target_edit: Optional[QLineEdit] = None
-    threshold_edit: Optional[QLineEdit] = None
-    test_state: UITestState = UITestState.IDLE
-    cursor_enabled: bool = True
-    rate_visible: bool = True
-    view_locked: bool = False
-
-    # 模拟器按钮
-    btn_pc_mode: Optional[QPushButton] = None
-    btn_pressure_test: Optional[QPushButton] = None
-
 # ---------- 主窗口 ----------
-class MainWindow(QMainWindow):
+class MainWindow(QMainWindow, MainWindowUiMixin):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("泄气阀压力测试上位机 作者：刘欣  「莫道桑榆晚，为霞尚满天」")
+        self.setWindowTitle("泄气阀压力测试上位机 作者：得鹿梦鱼  「莫道桑榆晚，为霞尚满天」")
         self.setMinimumSize(1200, 720)
 
         self.state = UIState()
@@ -205,7 +70,7 @@ class MainWindow(QMainWindow):
         # 热插拔自动连接定时器
         self._auto_connect_timer = QTimer(self)
         self._auto_connect_timer.timeout.connect(self._auto_connect_timer_cb)
-        self._auto_connect_timer.start(2000)
+        self._auto_connect_timer.start(Config.AUTO_CONNECT_INTERVAL_MS)
         self._auto_connect_enabled = True
         self.ensurePolished()
         logger.debug("[UI] MainWindow 初始化完成")
@@ -217,8 +82,8 @@ class MainWindow(QMainWindow):
         if self.data_ctrl.is_connected:
             return
         import serial.tools.list_ports
-        target_vid = 0x1A86
-        target_pid = 0x7523
+        target_vid = Config.SIMULATOR_VID
+        target_pid = Config.SIMULATOR_PID
         for port in serial.tools.list_ports.comports():
             if port.vid == target_vid and port.pid == target_pid:
                 self.state.combo_port.setCurrentText(port.device)
@@ -235,7 +100,7 @@ class MainWindow(QMainWindow):
         main_layout.setSpacing(0)
 
         toolbar = self._build_toolbar()
-        toolbar.setFixedHeight(36)
+        toolbar.setFixedHeight(Config.UI_TOOLBAR_HEIGHT)
         main_layout.addWidget(toolbar)
 
         body = QWidget()
@@ -244,7 +109,7 @@ class MainWindow(QMainWindow):
         body_layout.setSpacing(0)
 
         left_panel = self._build_left_panel()
-        left_panel.setFixedWidth(260)
+        left_panel.setFixedWidth(Config.UI_LEFT_PANEL_WIDTH)
         body_layout.addWidget(left_panel)
 
         right_panel = self._build_right_panel()
@@ -253,11 +118,11 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(body, stretch=1)
 
         log_area = self._build_log_area()
-        log_area.setFixedHeight(140)
+        log_area.setFixedHeight(Config.UI_LOG_HEIGHT)
         main_layout.addWidget(log_area)
 
         status_bar = self._build_status_bar()
-        status_bar.setFixedHeight(24)
+        status_bar.setFixedHeight(Config.UI_STATUS_BAR_HEIGHT)
         main_layout.addWidget(status_bar)
 
     def _build_toolbar(self):
@@ -269,12 +134,12 @@ class MainWindow(QMainWindow):
 
         lay.addWidget(QLabel("串口:"))
         self.state.combo_port = QComboBox()
-        self.state.combo_port.setFixedWidth(80)
+        self.state.combo_port.setFixedWidth(Config.UI_PORT_WIDTH)
         lay.addWidget(self.state.combo_port)
 
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["refresh"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["refresh"]
         btn_refresh = QPushButton(text)
-        btn_refresh.setStyleSheet(Config.BUTTON_STYLES["action"])
+        btn_refresh.setStyleSheet(UITheme.BUTTON_STYLES["action"])
         btn_refresh.clicked.connect(self._refresh_ports)
         lay.addWidget(btn_refresh)
 
@@ -282,55 +147,55 @@ class MainWindow(QMainWindow):
         self.state.combo_baud = QComboBox()
         self.state.combo_baud.addItems(Config.BAUDRATES)
         self.state.combo_baud.setCurrentText(Config.DEFAULT_BAUD)
-        self.state.combo_baud.setFixedWidth(80)
+        self.state.combo_baud.setFixedWidth(Config.UI_BAUD_WIDTH)
         lay.addWidget(self.state.combo_baud)
 
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["connect"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["connect"]
         self.state.btn_connect = QPushButton(text)
-        self.state.btn_connect.setStyleSheet(Config.BUTTON_STYLES["connect"])
+        self.state.btn_connect.setStyleSheet(UITheme.BUTTON_STYLES["connect"])
         self.state.btn_connect.clicked.connect(self._connect)
         lay.addWidget(self.state.btn_connect)
 
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["disconnect"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["disconnect"]
         self.state.btn_disconnect = QPushButton(text)
-        self.state.btn_disconnect.setStyleSheet(Config.BUTTON_STYLES["disconnect"])
+        self.state.btn_disconnect.setStyleSheet(UITheme.BUTTON_STYLES["disconnect"])
         self.state.btn_disconnect.setEnabled(False)
         self.state.btn_disconnect.clicked.connect(self._disconnect)
         lay.addWidget(self.state.btn_disconnect)
 
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["clear"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["clear"]
         clear_btn = QPushButton(text)
-        clear_btn.setStyleSheet(Config.BUTTON_STYLES["action"])
+        clear_btn.setStyleSheet(UITheme.BUTTON_STYLES["action"])
         clear_btn.clicked.connect(self._clear_screen)
         lay.addWidget(clear_btn)
 
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["toggle_plot"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["toggle_plot"]
         self.state.btn_toggle_plot = QPushButton(text)
-        self.state.btn_toggle_plot.setStyleSheet(Config.BUTTON_STYLES["toggle_plot"])
+        self.state.btn_toggle_plot.setStyleSheet(UITheme.BUTTON_STYLES["toggle_plot"])
         self.state.btn_toggle_plot.clicked.connect(self._toggle_plot_pause)
         lay.addWidget(self.state.btn_toggle_plot)
 
         lay.addWidget(QLabel("停止阈值:"))
         self.state.threshold_edit = QLineEdit(str(Config.PLOT_STOP_THRESHOLD))
-        self.state.threshold_edit.setFixedWidth(40)
+        self.state.threshold_edit.setFixedWidth(Config.UI_THRESHOLD_WIDTH)
         self.state.threshold_edit.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.state.threshold_edit.textChanged.connect(self._on_threshold_changed)
         lay.addWidget(self.state.threshold_edit)
         lay.addWidget(QLabel("mmHg"))
 
-        text, obj_name, checkable, checked = Config.BUTTON_TEXTS["toggle_rate"]
+        text, obj_name, checkable, checked = UITheme.BUTTON_TEXTS["toggle_rate"]
         self.state.btn_toggle_rate = QPushButton(text)
         if checked:
-            self.state.btn_toggle_rate.setStyleSheet(Config.BUTTON_STYLES["rate_on"])
+            self.state.btn_toggle_rate.setStyleSheet(UITheme.BUTTON_STYLES["rate_on"])
         else:
-            self.state.btn_toggle_rate.setStyleSheet(Config.BUTTON_STYLES["rate_off"])
+            self.state.btn_toggle_rate.setStyleSheet(UITheme.BUTTON_STYLES["rate_off"])
         self.state.btn_toggle_rate.setCheckable(checkable)
         self.state.btn_toggle_rate.setChecked(checked)
         self.state.btn_toggle_rate.clicked.connect(self._toggle_rate_curve)
         lay.addWidget(self.state.btn_toggle_rate)
 
         self.state.btn_lock_view = QPushButton("锁定视图：关")
-        self.state.btn_lock_view.setStyleSheet(Config.BUTTON_STYLES["action"])
+        self.state.btn_lock_view.setStyleSheet(UITheme.BUTTON_STYLES["action"])
         self.state.btn_lock_view.setCheckable(True)
         self.state.btn_lock_view.setChecked(False)
         self.state.btn_lock_view.clicked.connect(self._toggle_view_lock)
@@ -366,10 +231,10 @@ class MainWindow(QMainWindow):
         self.state.rate_visible = not self.state.rate_visible
         if self.state.rate_visible:
             self.state.btn_toggle_rate.setText("速率曲线：开")
-            self.state.btn_toggle_rate.setStyleSheet(Config.BUTTON_STYLES["rate_on"])
+            self.state.btn_toggle_rate.setStyleSheet(UITheme.BUTTON_STYLES["rate_on"])
         else:
             self.state.btn_toggle_rate.setText("速率曲线：关")
-            self.state.btn_toggle_rate.setStyleSheet(Config.BUTTON_STYLES["rate_off"])
+            self.state.btn_toggle_rate.setStyleSheet(UITheme.BUTTON_STYLES["rate_off"])
         if self.state.curve_rate is not None:
             self.state.curve_rate.setVisible(self.state.rate_visible)
 
@@ -377,13 +242,13 @@ class MainWindow(QMainWindow):
         self.state.view_locked = not self.state.view_locked
         if self.state.view_locked:
             self.state.btn_lock_view.setText("锁定视图：开")
-            self.state.btn_lock_view.setStyleSheet(Config.BUTTON_STYLES["lock_active"])
+            self.state.btn_lock_view.setStyleSheet(UITheme.BUTTON_STYLES["lock_active"])
             self.state.btn_lock_view.style().unpolish(self.state.btn_lock_view)
             self.state.btn_lock_view.style().polish(self.state.btn_lock_view)
             logger.info("视图已锁定，不再自动适配缩放")
         else:
             self.state.btn_lock_view.setText("锁定视图：关")
-            self.state.btn_lock_view.setStyleSheet(Config.BUTTON_STYLES["action"])
+            self.state.btn_lock_view.setStyleSheet(UITheme.BUTTON_STYLES["action"])
             self.state.btn_lock_view.style().unpolish(self.state.btn_lock_view)
             self.state.btn_lock_view.style().polish(self.state.btn_lock_view)
             x, y = self.data_ctrl.get_data()
@@ -441,7 +306,7 @@ class MainWindow(QMainWindow):
         h.setSpacing(2)
         h.addWidget(QLabel(label_text))
         edit = QLineEdit(default_text)
-        edit.setFixedWidth(44)
+        edit.setFixedWidth(Config.UI_PARAM_WIDTH)
         edit.textChanged.connect(lambda: self._on_param_change(test_key))
         setattr(self.state, attr_name, edit)
         h.addWidget(edit)
@@ -460,12 +325,12 @@ class MainWindow(QMainWindow):
         row_pc = QHBoxLayout()
         row_pc.setSpacing(6)
         self.state.btn_pc_mode = QPushButton("进入PC界面")
-        self.state.btn_pc_mode.setStyleSheet(Config.BUTTON_STYLES["action"])
+        self.state.btn_pc_mode.setStyleSheet(UITheme.BUTTON_STYLES["action"])
         self.state.btn_pc_mode.clicked.connect(self._toggle_pc_mode)
         row_pc.addWidget(self.state.btn_pc_mode)
 
         self.state.btn_pressure_test = QPushButton("压力表测试")
-        self.state.btn_pressure_test.setStyleSheet(Config.BUTTON_STYLES["start"])
+        self.state.btn_pressure_test.setStyleSheet(UITheme.BUTTON_STYLES["start"])
         self.state.btn_pressure_test.clicked.connect(self._on_pressure_test)
         row_pc.addWidget(self.state.btn_pressure_test)
         row_pc.addStretch()
@@ -477,15 +342,15 @@ class MainWindow(QMainWindow):
 
         row_start = QHBoxLayout()
         row_start.setSpacing(6)
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["start"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["start"]
         self.state.btn_start = QPushButton(text)
-        self.state.btn_start.setStyleSheet(Config.BUTTON_STYLES["start"])
+        self.state.btn_start.setStyleSheet(UITheme.BUTTON_STYLES["start"])
         self.state.btn_start.clicked.connect(self._on_start)
         row_start.addWidget(self.state.btn_start)
 
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["stop"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["stop"]
         self.state.btn_stop = QPushButton(text)
-        self.state.btn_stop.setStyleSheet(Config.BUTTON_STYLES["stop"])
+        self.state.btn_stop.setStyleSheet(UITheme.BUTTON_STYLES["stop"])
         self.state.btn_stop.setEnabled(False)
         self.state.btn_stop.clicked.connect(self._on_stop)
         row_start.addWidget(self.state.btn_stop)
@@ -494,15 +359,15 @@ class MainWindow(QMainWindow):
 
         row_save = QHBoxLayout()
         row_save.setSpacing(6)
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["save_img"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["save_img"]
         btn_save_img = QPushButton(text)
-        btn_save_img.setStyleSheet(Config.BUTTON_STYLES["action"])
+        btn_save_img.setStyleSheet(UITheme.BUTTON_STYLES["action"])
         btn_save_img.clicked.connect(self._save_image)
         row_save.addWidget(btn_save_img)
 
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["save_csv"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["save_csv"]
         btn_save_csv = QPushButton(text)
-        btn_save_csv.setStyleSheet(Config.BUTTON_STYLES["action"])
+        btn_save_csv.setStyleSheet(UITheme.BUTTON_STYLES["action"])
         btn_save_csv.clicked.connect(self._save_csv)
         row_save.addWidget(btn_save_csv)
         row_save.addStretch()
@@ -510,15 +375,15 @@ class MainWindow(QMainWindow):
 
         row_load = QHBoxLayout()
         row_load.setSpacing(6)
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["load_wave"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["load_wave"]
         btn_load = QPushButton(text)
-        btn_load.setStyleSheet(Config.BUTTON_STYLES["action"])
+        btn_load.setStyleSheet(UITheme.BUTTON_STYLES["action"])
         btn_load.clicked.connect(self._load_waveform)
         row_load.addWidget(btn_load)
 
-        text, obj_name, _, _ = Config.BUTTON_TEXTS["cursor"]
+        text, obj_name, _, _ = UITheme.BUTTON_TEXTS["cursor"]
         btn_cursor = QPushButton(text)
-        btn_cursor.setStyleSheet(Config.BUTTON_STYLES["action"])
+        btn_cursor.setStyleSheet(UITheme.BUTTON_STYLES["action"])
         btn_cursor.clicked.connect(self._toggle_cursor)
         row_load.addWidget(btn_cursor)
         row_load.addStretch()
@@ -540,7 +405,7 @@ class MainWindow(QMainWindow):
         lbl_rate.setStyleSheet("color: #8b949e; font-size: 13px;")
         self.state.label_rate = QLabel("--")
         self.state.label_rate.setStyleSheet(
-            f"color: {Config.COLORS['instant_rate']}; font-weight: bold; font-size: 14px; font-family: Consolas;"
+            f"color: {UITheme.COLORS['instant_rate']}; font-weight: bold; font-size: 14px; font-family: Consolas;"
         )
         h_rate.addWidget(lbl_rate)
         h_rate.addWidget(self.state.label_rate)
@@ -571,44 +436,44 @@ class MainWindow(QMainWindow):
         plot_widget = self._build_plot_area()
         layout.addWidget(plot_widget, stretch=1)
         info_widget = self._build_info_row()
-        info_widget.setFixedHeight(75)
+        info_widget.setFixedHeight(Config.UI_INFO_HEIGHT)
         layout.addWidget(info_widget)
         return right
 
     def _build_plot_area(self):
         plot_widget = pg.PlotWidget()
-        plot_widget.setBackground(Config.COLORS['bg_chart'])
+        plot_widget.setBackground(UITheme.COLORS['bg_chart'])
         plot_widget.showGrid(x=True, y=True, alpha=0.15)
         plot_widget.setLabel('bottom', '时间', units='s', color='#8b949e')
-        plot_widget.setLabel('left', '压力', units='mmHg', color=Config.COLORS['pressure_curve'])
+        plot_widget.setLabel('left', '压力', units='mmHg', color=UITheme.COLORS['pressure_curve'])
         plot_widget.setTitle('实时压力曲线', color='#c9d1d9', size='14pt')
         plot_widget.getAxis('bottom').setStyle(tickFont=None, tickTextOffset=4)
 
         left_axis = plot_widget.getAxis('left')
-        left_axis.setPen(pg.mkPen(Config.COLORS['pressure_curve']))
-        left_axis.setTextPen(pg.mkPen(Config.COLORS['pressure_curve']))
+        left_axis.setPen(pg.mkPen(UITheme.COLORS['pressure_curve']))
+        left_axis.setTextPen(pg.mkPen(UITheme.COLORS['pressure_curve']))
         left_axis.setStyle(tickFont=None, tickTextOffset=4)
 
         viewbox = plot_widget.getViewBox()
-        viewbox.setRange(xRange=(0, 60), yRange=(0, 350))
+        viewbox.setRange(xRange=Config.PLOT_INITIAL_X_RANGE, yRange=Config.PLOT_INITIAL_Y_RANGE)
         viewbox.setBackgroundColor('#0d1117')
 
-        pen = pg.mkPen(Config.COLORS['pressure_curve'], width=2.5)
+        pen = pg.mkPen(UITheme.COLORS['pressure_curve'], width=2.5)
         self.state.curve_pressure = pg.PlotDataItem([], [], pen=pen, downsample=100,
                                                     downsampleMethod='peak', autoDownsample=True)
         plot_widget.addItem(self.state.curve_pressure)
 
         plot_widget.showAxis('right')
         right_axis = plot_widget.getAxis('right')
-        right_axis.setLabel('速率', units='mmHg/s', color=Config.COLORS['rate_curve'])
-        right_axis.setPen(pg.mkPen(Config.COLORS['rate_curve']))
-        right_axis.setTextPen(pg.mkPen(Config.COLORS['rate_curve']))
+        right_axis.setLabel('速率', units='mmHg/s', color=UITheme.COLORS['rate_curve'])
+        right_axis.setPen(pg.mkPen(UITheme.COLORS['rate_curve']))
+        right_axis.setTextPen(pg.mkPen(UITheme.COLORS['rate_curve']))
         right_axis.setStyle(tickFont=None, tickTextOffset=4)
 
-        pen_rate = pg.mkPen(Config.COLORS['rate_curve'], width=2.5)
+        pen_rate = pg.mkPen(UITheme.COLORS['rate_curve'], width=2.5)
         self.state.curve_rate = plot_widget.plot([], [], pen=pen_rate, yAxis='right')
         self.state.curve_rate.setVisible(True)
-        right_axis.setRange(0, 50)
+        right_axis.setRange(*Config.PLOT_INITIAL_RATE_RANGE)
 
         self.state.plot_widget = plot_widget
         plot_widget.scene().sigMouseClicked.connect(self._on_plot_clicked)
@@ -627,12 +492,12 @@ class MainWindow(QMainWindow):
 
         if not self.state.view_locked:
             viewbox = self.state.plot_widget.getViewBox()
-            max_time = max(x_data) + 2
-            if max_time < 10:
-                max_time = 10
+            max_time = max(x_data) + Config.PLOT_AUTO_TIME_PADDING
+            if max_time < Config.PLOT_AUTO_MIN_TIME:
+                max_time = Config.PLOT_AUTO_MIN_TIME
             viewbox.setRange(xRange=(0, max_time))
-            ymin = min(0, min(y_data) - 10)
-            ymax = max(350, max(y_data) + 10)
+            ymin = min(0, min(y_data) - Config.PLOT_AUTO_PRESSURE_PADDING)
+            ymax = max(Config.PLOT_INITIAL_Y_RANGE[1], max(y_data) + Config.PLOT_AUTO_PRESSURE_PADDING)
             viewbox.setRange(yRange=(ymin, ymax))
             self._update_rate_axis(rate)
 
@@ -647,15 +512,15 @@ class MainWindow(QMainWindow):
             return
         current_rate = rate[-1]
         peak_rate = max(rate)
-        if current_rate <= 20:
-            rmax = 25.0
-            step = 0.5
+        if current_rate <= Config.PLOT_RATE_CURRENT_THRESHOLD:
+            rmax = Config.PLOT_RATE_LOW_MAX
+            step = Config.PLOT_RATE_LOW_STEP
         else:
-            rmax = peak_rate + 5
-            if rmax <= 50:
-                step = 2
+            rmax = peak_rate + Config.PLOT_RATE_HIGH_PADDING
+            if rmax <= Config.PLOT_RATE_MEDIUM_MAX:
+                step = Config.PLOT_RATE_MEDIUM_STEP
             else:
-                step = 5
+                step = Config.PLOT_RATE_HIGH_STEP
         if rmax < 1:
             rmax = 1
         max_tick = int(np.ceil(rmax / step)) * step
@@ -665,7 +530,7 @@ class MainWindow(QMainWindow):
         else:
             tick_labels = [f"{int(v)}" for v in tick_values]
         ticks = list(zip(tick_values, tick_labels))
-        if len(ticks) > 15:
+        if len(ticks) > Config.PLOT_MAX_TICK_COUNT:
             step *= 2
             max_tick = int(np.ceil(rmax / step)) * step
             tick_values = np.arange(0, max_tick + step/2, step)
@@ -690,7 +555,7 @@ class MainWindow(QMainWindow):
         lbl_inf.setStyleSheet("color: #8b949e; font-size: 16px;")
         self.state.label_inflate = QLabel("--")
         self.state.label_inflate.setStyleSheet(
-            f"color: {Config.COLORS['inflate_result']}; font-weight: bold; font-size: 14px; font-family: Consolas;"
+            f"color: {UITheme.COLORS['inflate_result']}; font-weight: bold; font-size: 14px; font-family: Consolas;"
         )
         h_inf.addWidget(lbl_inf)
         h_inf.addWidget(self.state.label_inflate)
@@ -705,7 +570,7 @@ class MainWindow(QMainWindow):
         lbl_def.setStyleSheet("color: #8b949e; font-size: 16px;")
         self.state.label_deflate = QLabel("--")
         self.state.label_deflate.setStyleSheet(
-            f"color: {Config.COLORS['deflate_result']}; font-weight: bold; font-size: 14px; font-family: Consolas;"
+            f"color: {UITheme.COLORS['deflate_result']}; font-weight: bold; font-size: 14px; font-family: Consolas;"
         )
         h_def.addWidget(lbl_def)
         h_def.addWidget(self.state.label_deflate)
@@ -743,7 +608,7 @@ class MainWindow(QMainWindow):
             y_range = viewbox.viewRange()[1]
             x_center = (x_range[0] + x_range[1]) / 2
             y_center = (y_range[0] + y_range[1]) / 2
-            scale_factor = 1.1 if delta > 0 else 1 / 1.1
+            scale_factor = Config.PLOT_ZOOM_FACTOR if delta > 0 else 1 / Config.PLOT_ZOOM_FACTOR
             if modifiers & Qt.KeyboardModifier.ControlModifier:
                 new_x_range = (x_center - (x_center - x_range[0]) * scale_factor,
                                x_center + (x_range[1] - x_center) * scale_factor)
@@ -770,7 +635,7 @@ class MainWindow(QMainWindow):
 
         if y_data:
             pressure = y_data[-1]
-            if pressure >= 0:
+            if pressure >= Config.MIN_DISPLAY_PRESSURE:
                 self.label_pressure.setText(
                     f'<span style="font-size:64px;color:#58a6ff;font-weight:bold;font-family:Consolas;">{pressure:.1f}</span>'
                     f'<span style="font-size:25px;color:#8b949e;vertical-align:sub;"> mmHg</span>'
@@ -793,7 +658,7 @@ class MainWindow(QMainWindow):
     @Slot(float)
     def _on_rate_update(self, rate: float):
         if math.isinf(rate) or math.isnan(rate) or rate > Config.MAX_RATE_LIMIT:
-            display = ">2000"
+            display = f">{int(Config.MAX_RATE_LIMIT)}"
         else:
             display = f"{rate:.2f}"
         self.state.label_rate.setText(f"{display} mmHg/s")
@@ -801,7 +666,7 @@ class MainWindow(QMainWindow):
         x_data, y_data = self.data_ctrl.get_data()
         if y_data:
             pressure = y_data[-1]
-            if pressure >= 0:
+            if pressure >= Config.MIN_DISPLAY_PRESSURE:
                 self.label_pressure.setText(
                     f'<span style="font-size:64px;color:#58a6ff;font-weight:bold;font-family:Consolas;">{pressure:.1f}</span>'
                     f'<span style="font-size:25px;color:#8b949e;vertical-align:sub;"> mmHg</span>'
@@ -882,7 +747,7 @@ class MainWindow(QMainWindow):
             self._save_serial_settings()
             self.state.btn_connect.setEnabled(False)
             self.state.btn_disconnect.setEnabled(True)
-            self.set_status("监听中", Config.COLORS['inflate_result'])
+            self.set_status("监听中", UITheme.COLORS['inflate_result'])
             self.data_ctrl.start_logging()
             try:
                 self._read_params_to_ctrl()
@@ -898,10 +763,10 @@ class MainWindow(QMainWindow):
             # 重置锁定视图状态
             self.state.view_locked = False
             self.state.btn_lock_view.setText("锁定视图：关")
-            self.state.btn_lock_view.setStyleSheet(Config.BUTTON_STYLES["action"])
+            self.state.btn_lock_view.setStyleSheet(UITheme.BUTTON_STYLES["action"])
             self.state.btn_lock_view.setChecked(False)
         else:
-            self.set_status("连接失败", Config.COLORS['deflate_result'])
+            self.set_status("连接失败", UITheme.COLORS['deflate_result'])
         self._update_buttons()
 
     def _disconnect(self):
@@ -913,7 +778,7 @@ class MainWindow(QMainWindow):
         self.state.btn_disconnect.setEnabled(False)
         if self.data_ctrl.is_logging():
             self.data_ctrl.stop_logging()
-        self.set_status("已断开", Config.COLORS['fg_secondary'])
+        self.set_status("已断开", UITheme.COLORS['fg_secondary'])
         self.state.test_state = UITestState.IDLE
         self._update_buttons()
         self._clear_cursors()
@@ -928,7 +793,7 @@ class MainWindow(QMainWindow):
         self.state.view_locked = False
         self.state.btn_lock_view.setText("锁定视图：关")
         self.state.btn_lock_view.setChecked(False)
-        self.state.btn_lock_view.setStyleSheet(Config.BUTTON_STYLES["action"])
+        self.state.btn_lock_view.setStyleSheet(UITheme.BUTTON_STYLES["action"])
 
     def _read_params_to_ctrl(self):
         try:
@@ -980,7 +845,7 @@ class MainWindow(QMainWindow):
         if self.data_ctrl.send_command("AT#AG"):
             self.state.test_state = UITestState.RUNNING
             self._update_buttons()
-            self.set_status("测量中...", Config.COLORS['log_yellow'])
+            self.set_status("测量中...", UITheme.COLORS['log_yellow'])
             logger.cmd("发送命令: AT#AG")
             self._update_plot_button_state()
         else:
@@ -993,7 +858,7 @@ class MainWindow(QMainWindow):
         if self.data_ctrl.send_command("AT#AH"):
             self.state.test_state = UITestState.FINISHED
             self._update_buttons()
-            self.set_status("测试结束", Config.COLORS['log_blue'])
+            self.set_status("测试结束", UITheme.COLORS['log_blue'])
             logger.cmd("发送命令: AT#AH")
             phase = self.data_ctrl.test_manager.get_stage()
             if phase == TestPhase.INFLATING:
@@ -1032,7 +897,7 @@ class MainWindow(QMainWindow):
             else:
                 self._update_buttons()
                 import time
-                time.sleep(0.2)
+                time.sleep(Config.PC_MODE_SWITCH_DELAY)
 
         cmd = bytes(Config.BINARY_COMMANDS["pressure_test"])
         if self.data_ctrl.send_bytes_command(cmd):
@@ -1077,7 +942,7 @@ class MainWindow(QMainWindow):
                 self.data_ctrl.load_data_from_csv(fn)
                 self.state.test_state = UITestState.IDLE
                 self._update_buttons()
-                self.set_status("离线查看", Config.COLORS['log_blue'])
+                self.set_status("离线查看", UITheme.COLORS['log_blue'])
                 logger.success(f"已加载波形: {os.path.basename(fn)}")
                 self._update_plot_button_state()
             except Exception as e:
@@ -1097,8 +962,8 @@ class MainWindow(QMainWindow):
 
     def _reset_plot_view(self):
         vb = self.state.plot_widget.getViewBox()
-        vb.setRange(xRange=(0, 60), yRange=(0, 350))
-        self.state.plot_widget.getAxis('right').setRange(0, 50)
+        vb.setRange(xRange=Config.PLOT_INITIAL_X_RANGE, yRange=Config.PLOT_INITIAL_Y_RANGE)
+        self.state.plot_widget.getAxis('right').setRange(*Config.PLOT_INITIAL_RATE_RANGE)
 
     def clear_results(self):
         self.state.label_rate.setText("--")
@@ -1225,7 +1090,7 @@ class MainWindow(QMainWindow):
 
         dt = abs(x2 - x1)
         dp = abs(y2 - y1)
-        if dt < 1e-9:
+        if dt < Config.TIME_DELTA_EPSILON:
             rate = 0.0
         else:
             rate = dp / dt
@@ -1247,7 +1112,7 @@ class MainWindow(QMainWindow):
         if group_name == 'group1':
             self.state.label_rate.setText(f"{rate:.2f} mmHg/s")
             self.state.label_rate.setStyleSheet(
-                f"color: {Config.COLORS['instant_rate']}; font-weight: bold; font-size: 14px; font-family: Consolas;"
+                f"color: {UITheme.COLORS['instant_rate']}; font-weight: bold; font-size: 14px; font-family: Consolas;"
             )
             if self.group1_measure_item is None:
                 self.group1_measure_item = pg.TextItem(
@@ -1289,7 +1154,7 @@ class MainWindow(QMainWindow):
 
         self.state.label_rate.setText("--")
         self.state.label_rate.setStyleSheet(
-            f"color: {Config.COLORS['instant_rate']}; font-weight: bold; font-size: 14px; font-family: Consolas;"
+            f"color: {UITheme.COLORS['instant_rate']}; font-weight: bold; font-size: 14px; font-family: Consolas;"
         )
 
     # ---------- 关闭事件 ----------
@@ -1308,3 +1173,13 @@ class MainWindow(QMainWindow):
                 pass
         finally:
             event.accept()
+
+
+# 布局实现集中在 ui_components.py；主窗口类保留交互和业务行为。
+for _ui_method in (
+    "_build_ui", "_build_toolbar", "_build_left_panel", "_build_param_group",
+    "_add_param_input", "_build_control_group", "_build_rate_display",
+    "_build_right_panel", "_build_plot_area", "_build_info_row",
+    "_build_log_area", "_build_status_bar",
+):
+    setattr(MainWindow, _ui_method, getattr(MainWindowUiMixin, _ui_method))
