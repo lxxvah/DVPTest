@@ -219,7 +219,7 @@ class DataController(QObject):
                 self.x_data.append(curr_t)
                 self.y_data.append(curr_p)
                 self.display_y.append(curr_p)
-                if len(self.x_data) > self._max_points:
+                if self._max_points > 0 and len(self.x_data) > self._max_points:
                     self.x_data = self.x_data[-self._max_points:]
                     self.y_data = self.y_data[-self._max_points:]
                     self.display_y = self.display_y[-self._max_points:]
