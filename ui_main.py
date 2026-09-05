@@ -34,7 +34,7 @@ logger = logging.getLogger("DVPTest")
 class MainWindow(QMainWindow, MainWindowUiMixin):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("泄气充气压力性能测试 作者：刘欣  「莫道桑榆晚，为霞尚满天」")
+        self.setWindowTitle("泄气充气压力性能测试 作者：得鹿梦鱼  「莫道桑榆晚，为霞尚满天」")
         self.setMinimumSize(1200, 720)
 
         self.state = UIState()
