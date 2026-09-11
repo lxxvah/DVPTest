@@ -499,6 +499,7 @@ class MainWindowUiMixin:
         plot.scene().sigMouseClicked.connect(self._on_plot_clicked)
         plot.setCursor(Qt.CrossCursor)
         plot.installEventFilter(self)
+        self._init_reference_lines()
         return plot
 
     def _build_info_row(self):

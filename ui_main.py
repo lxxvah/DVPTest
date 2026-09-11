@@ -53,6 +53,7 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
         self._refresh_ports()
         self._load_serial_settings()
         self._load_test_settings()
+        self._update_reference_lines()
         self._update_buttons()
 
         # ★ 光标系统（两组独立测量）
@@ -482,6 +483,46 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
         plot_widget.installEventFilter(self)
         return plot_widget
 
+    # ============================================================
+    # 参数参考线
+    # ============================================================
+    def _init_reference_lines(self):
+        self._ref_lines = []
+
+    def _update_reference_lines(self):
+        """根据当前 6 个参数重建参考线（中灰细虚线，去重）"""
+        if not hasattr(self, '_ref_lines'):
+            return
+        for line in self._ref_lines:
+            try:
+                self.state.plot_widget.removeItem(line)
+            except Exception:
+                pass
+        self._ref_lines.clear()
+
+        values = set()
+        for edit in (
+            self.state.inflate_start_edit,
+            self.state.inflate_mid_edit,
+            self.state.inflate_target_edit,
+            self.state.deflate_start_edit,
+            self.state.deflate_mid_edit,
+            self.state.deflate_target_edit,
+        ):
+            try:
+                values.add(round(float(edit.text()), 3))
+            except (ValueError, TypeError):
+                continue
+        if not values:
+            return
+
+        pen = pg.mkPen((140, 140, 140), width=1.0, style=Qt.DashLine)
+        pen.setDashPattern([3, 6])
+        for v in sorted(values):
+            line = pg.InfiniteLine(pos=v, angle=0, movable=False, pen=pen)
+            self.state.plot_widget.addItem(line)
+            self._ref_lines.append(line)
+
     def _refresh_plot(self, x_data, y_data):
         if not x_data:
             return
@@ -900,6 +941,7 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
                     logger.warning("泄气参数不合法（必须 起始>中间>目标）")
         except ValueError:
             logger.warning("参数含有非法数字，请检查输入")
+        self._update_reference_lines()
 
     def _on_start(self):
         if not self.data_ctrl.is_connected:

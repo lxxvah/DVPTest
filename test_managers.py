@@ -9,6 +9,7 @@ from enum import Enum
 from typing import Callable, Optional
 
 from inflection_detector import InflectionDetector
+from direction_detector import DirectionDetector, Direction
 
 logger = logging.getLogger("DVPTest")
 
@@ -64,7 +65,10 @@ class TestManager:
         # ★ 拐点检测器
         # ============================================================
         self._inflection_detector = InflectionDetector()
-
+        # ============================================================
+        # ★ 压力变化方向判断
+        # ============================================================
+        self._direction_detector = DirectionDetector()
         # ============================================================
         # ★ 充气监测状态
         # ============================================================
@@ -147,6 +151,7 @@ class TestManager:
         self._deflate_counter = 0
 
         self._inflection_detector.reset()
+        self._direction_detector.reset()
 
         self._inflate_start_recorded = False
         self._inflate_mid_recorded = False
@@ -182,8 +187,8 @@ class TestManager:
         # ============================================================
         # ★ 第3步：泄气监测
         # ============================================================
-        self._monitor_deflate(t, p)
-
+        dir_result = self._direction_detector.process(t, p, signed_rate, acceleration)
+        self._monitor_deflate(t, p, dir_result)
         # ============================================================
         # ★ 第4步：拐点检测
         # ============================================================
@@ -313,12 +318,15 @@ class TestManager:
     # ============================================================
     # ★ 泄气监测
     # ============================================================
-    def _monitor_deflate(self, t: float, p: float):
+    def _monitor_deflate(self, t: float, p: float, dir_result):
+        """泄气监测：只在 FALLING 状态下才记录阈值穿越"""
+        # 三项都记录完就不再监测
         if (self._deflate_packet['start']['reached'] and
-            self._deflate_packet['mid']['reached'] and
-            self._deflate_packet['target']['reached']):
+                self._deflate_packet['mid']['reached'] and
+                self._deflate_packet['target']['reached']):
             return
 
+        # 始终跟踪"曾经高于阈值"（与阶段无关）
         if p > self.deflate_start_val:
             self._was_above_start = True
         if p > self.deflate_mid_val:
@@ -326,29 +334,46 @@ class TestManager:
         if p > self.deflate_target_val:
             self._was_above_target = True
 
-        if not self._deflate_packet['start']['reached'] and self._was_above_start and p <= self.deflate_start_val:
+        # ★ 核心：只有 FALLING 状态才允许记录穿越
+        if dir_result.direction != Direction.FALLING:
+            return
+
+        # 记录 start 穿越
+        if (not self._deflate_packet['start']['reached']
+                and self._was_above_start
+                and p <= self.deflate_start_val):
             self._deflate_packet['start']['time'] = t
             self._deflate_packet['start']['reached'] = True
             self._was_above_start = False
-            logger.success(f"★ 泄气起始值 {self.deflate_start_val} mmHg 真实穿越 @ {t:.2f}s")
+            logger.success(
+                f"★ 泄气起始值 {self.deflate_start_val} 穿越 @ {t:.2f}s "
+                f"(drop={dir_result.peak_drop:.1f}, "
+                f"slope_ema={dir_result.slope_ema:.1f}, "
+                f"fs={dir_result.sample_rate:.1f}Hz)"
+            )
 
-        if not self._deflate_packet['mid']['reached'] and self._was_above_mid and p <= self.deflate_mid_val:
+        # 记录 mid 穿越
+        if (not self._deflate_packet['mid']['reached']
+                and self._was_above_mid
+                and p <= self.deflate_mid_val):
             self._deflate_packet['mid']['time'] = t
             self._deflate_packet['mid']['reached'] = True
             self._was_above_mid = False
-            logger.success(f"★ 泄气中间值 {self.deflate_mid_val} mmHg 真实穿越 @ {t:.2f}s")
+            logger.success(f"★ 泄气中间值 {self.deflate_mid_val} 穿越 @ {t:.2f}s")
 
-        if not self._deflate_packet['target']['reached'] and self._was_above_target and p <= self.deflate_target_val:
+        # 记录 target 穿越（并触发结果）
+        if (not self._deflate_packet['target']['reached']
+                and self._was_above_target
+                and p <= self.deflate_target_val):
             self._deflate_packet['target']['time'] = t
             self._deflate_packet['target']['reached'] = True
             self._was_above_target = False
-            logger.success(f"★ 泄气目标值 {self.deflate_target_val} mmHg 真实穿越 @ {t:.2f}s")
+            logger.success(f"★ 泄气目标值 {self.deflate_target_val} 穿越 @ {t:.2f}s")
 
             if not self._deflate_result_sent:
                 self._deflate_result_sent = True
                 self._deflate_packet['state'] = 'DONE'
                 logger.info("泄气结果已生成（由目标值到达触发）")
-                logger.success("★ 泄气结果已触发（目标到达）")
                 self.on_result('deflate', self._deflate_packet.copy())
 
     # ==================== 查询接口 ====================
