@@ -4,6 +4,8 @@ import sys
 import os
 import math
 import logging
+import ctypes
+import sys
 
 from PySide6.QtCore import (
     QObject, Signal, Slot, QThread, Qt, QRectF, QEvent, QTimer, QSettings,
@@ -30,6 +32,33 @@ from ui_components import LogWidget, UIState, UITestState, UITheme, MainWindowUi
 # ---------- 日志记录器 ----------
 logger = logging.getLogger("DVPTest")
 
+def set_titlebar_dark(hwnd, dark=True, rgb=None):
+    """设置 Windows 标题栏颜色（Win11 支持自定义色，Win10 仅暗色/亮色）"""
+    if sys.platform != "win32":
+        return
+    try:
+        dwm = ctypes.windll.dwmapi
+    except Exception:
+        return
+
+    val = ctypes.c_int(1 if dark else 0)
+    for attr in (20, 19):
+        try:
+            dwm.DwmSetWindowAttribute(
+                ctypes.c_void_p(hwnd), ctypes.c_uint(attr),
+                ctypes.byref(val), ctypes.sizeof(val))
+        except Exception:
+            pass
+
+    if rgb is not None:
+        r, g, b = rgb
+        color = ctypes.c_uint((b << 16) | (g << 8) | r)
+        try:
+            dwm.DwmSetWindowAttribute(
+                ctypes.c_void_p(hwnd), ctypes.c_uint(35),
+                ctypes.byref(color), ctypes.sizeof(color))
+        except Exception:
+            pass
 # ---------- 主窗口 ----------
 class MainWindow(QMainWindow, MainWindowUiMixin):
     def __init__(self):
@@ -76,6 +105,15 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
         self._auto_connect_enabled = True
         self.ensurePolished()
         logger.debug("[UI] MainWindow 初始化完成")
+
+        QTimer.singleShot(0, self._apply_dark_titlebar)
+
+    def _apply_dark_titlebar(self):
+        """等窗口创建完后设置标题栏颜色"""
+        try:
+            set_titlebar_dark(int(self.winId()), dark=True, rgb=(0x2e, 0x9e, 0x91))
+        except Exception as e:
+            logger.debug(f"[UI] 设置标题栏颜色失败: {e}")
 
     # ---------- 自动连接定时器回调 ----------
     def _auto_connect_timer_cb(self):
