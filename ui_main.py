@@ -482,6 +482,7 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
 
     def _build_plot_area(self):
         plot_widget = pg.PlotWidget()
+        plot_widget.getPlotItem().setMenuEnabled(False)
         plot_widget.setBackground(UITheme.COLORS['bg_chart'])
         plot_widget.showGrid(x=True, y=True, alpha=0.15)
         plot_widget.setLabel('bottom', '时间', units='s', color='#8b949e')
@@ -1057,21 +1058,180 @@ class MainWindow(QMainWindow, MainWindowUiMixin):
             logger.error("发送压力表测试命令失败")
 
     # ---------- 其他功能 ----------
+    def _grab_full_ui(self):
+        """抓取包含 Windows 系统标题栏的完整窗口"""
+        # 方案 1：全屏截图 + 按窗口 frameGeometry 裁剪（最稳）
+        pm = self._grab_via_screen_crop()
+        if pm is not None and not pm.isNull() and pm.width() > 50 and not self._is_all_black(pm):
+            return pm
+
+        # 方案 2：PrintWindow（含标题栏，Win8.1+ 支持 PW_RENDERFULLCONTENT）
+        if sys.platform == "win32":
+            pm = self._grab_with_printwindow()
+            if pm is not None and not pm.isNull() and pm.width() > 50 and not self._is_all_black(pm):
+                return pm
+
+        # 方案 3：兜底，抓客户区
+        return self.grab()
+
+    def _grab_via_screen_crop(self):
+        """全屏截图后按窗口 frameGeometry 裁剪（含标题栏/边框）"""
+        try:
+            screen = self.screen() or QApplication.primaryScreen()
+            if screen is None:
+                return None
+
+            # 确保窗口可见、在前台
+            if self.isMinimized():
+                self.showNormal()
+            self.raise_()
+            self.activateWindow()
+            QApplication.processEvents()
+
+            full = screen.grabWindow()   # 抓整个屏幕
+            if full.isNull():
+                return None
+
+            geo = self.frameGeometry()   # 含标题栏和边框（逻辑坐标）
+            screen_geo = screen.geometry()
+            dpr = full.devicePixelRatio()
+
+            x = int((geo.x() - screen_geo.x()) * dpr)
+            y = int((geo.y() - screen_geo.y()) * dpr)
+            w = int(geo.width() * dpr)
+            h = int(geo.height() * dpr)
+
+            # 边界裁剪，防止越界
+            if x < 0:
+                w += x
+                x = 0
+            if y < 0:
+                h += y
+                y = 0
+            if x + w > full.width():
+                w = full.width() - x
+            if y + h > full.height():
+                h = full.height() - y
+
+            if w <= 0 or h <= 0:
+                return None
+            return full.copy(x, y, w, h)
+        except Exception as e:
+            logger.error(f"屏幕裁剪抓取失败: {e}")
+            return None
+
+    def _grab_with_printwindow(self):
+        """Windows PrintWindow 抓取整个窗口（含标题栏）"""
+        try:
+            import ctypes as _ct
+            from ctypes import wintypes
+            from PySide6.QtGui import QImage
+
+            hwnd = int(self.winId())
+            rect = wintypes.RECT()
+            _ct.windll.user32.GetWindowRect(hwnd, _ct.byref(rect))
+            w = rect.right - rect.left
+            h = rect.bottom - rect.top
+            if w <= 0 or h <= 0:
+                return None
+
+            hwnd_dc = _ct.windll.user32.GetWindowDC(hwnd)
+            mfc_dc = _ct.windll.gdi32.CreateCompatibleDC(hwnd_dc)
+            save_bmp = _ct.windll.gdi32.CreateCompatibleBitmap(hwnd_dc, w, h)
+            _ct.windll.gdi32.SelectObject(mfc_dc, save_bmp)
+
+            # PW_RENDERFULLCONTENT = 0x2（Win8.1+ 可抓 DWM 绘制内容）
+            result = _ct.windll.user32.PrintWindow(hwnd, mfc_dc, 2)
+            if result == 0:
+                _ct.windll.user32.PrintWindow(hwnd, mfc_dc, 0)
+
+            class BMIH(_ct.Structure):
+                _fields_ = [
+                    ("biSize", wintypes.DWORD),
+                    ("biWidth", wintypes.LONG),
+                    ("biHeight", wintypes.LONG),
+                    ("biPlanes", wintypes.WORD),
+                    ("biBitCount", wintypes.WORD),
+                    ("biCompression", wintypes.DWORD),
+                    ("biSizeImage", wintypes.DWORD),
+                    ("biXPelsPerMeter", wintypes.LONG),
+                    ("biYPelsPerMeter", wintypes.LONG),
+                    ("biClrUsed", wintypes.DWORD),
+                    ("biClrImportant", wintypes.DWORD),
+                ]
+
+            bmi = BMIH()
+            bmi.biSize = _ct.sizeof(BMIH)
+            bmi.biWidth = w
+            bmi.biHeight = -h
+            bmi.biPlanes = 1
+            bmi.biBitCount = 32
+            bmi.biCompression = 0
+
+            buf = _ct.create_string_buffer(w * h * 4)
+            _ct.windll.gdi32.GetDIBits(mfc_dc, save_bmp, 0, h, buf, _ct.byref(bmi), 0)
+
+            _ct.windll.gdi32.DeleteObject(save_bmp)
+            _ct.windll.gdi32.DeleteDC(mfc_dc)
+            _ct.windll.user32.ReleaseDC(hwnd, hwnd_dc)
+
+            image = QImage(buf, w, h, w * 4, QImage.Format.Format_RGB32)
+            return QPixmap.fromImage(image.copy())
+        except Exception as e:
+            logger.error(f"PrintWindow 抓图失败: {e}")
+            return None
+
+    def _is_all_black(self, pixmap):
+        """快速判断图片是否几乎全黑"""
+        try:
+            img = pixmap.toImage()
+            w, h = img.width(), img.height()
+            if w < 10 or h < 10:
+                return True
+            for py in (5, h // 4, h // 2, h * 3 // 4, h - 5):
+                for px in (5, w // 4, w // 2, w * 3 // 4, w - 5):
+                    if img.pixelColor(px, py).value() > 30:
+                        return False
+            return True
+        except Exception:
+            return False
+
     def _save_image(self):
-        if self.state.plot_widget is None:
-            QMessageBox.warning(self, "警告", "绘图区域未初始化")
+        # ★ 抓取整个 UI（含 Windows 系统标题栏）
+        pixmap = self._grab_full_ui()
+        if pixmap.isNull():
+            QMessageBox.warning(self, "警告", "截图失败，请重试")
             return
-        fn, _ = QFileDialog.getSaveFileName(self, "保存图片", "", "PNG (*.png);;JPEG (*.jpg)")
-        if fn:
-            try:
-                pixmap = self.state.plot_widget.grab()
-                if pixmap.isNull():
-                    QMessageBox.warning(self, "警告", "截图失败，请重试")
-                    return
-                pixmap.save(fn)
+
+        fn, selected_filter = QFileDialog.getSaveFileName(
+            self, "保存图片", "", "PNG (*.png);;JPEG (*.jpg)"
+        )
+        if not fn:
+            return
+
+        # 自动补扩展名
+        if not os.path.splitext(fn)[1]:
+            fn += ".jpg" if "JPEG" in selected_filter else ".png"
+
+        try:
+            if pixmap.save(fn):
                 logger.success(f"图片已保存至 {fn}")
-            except Exception as e:
-                QMessageBox.critical(self, "错误", f"保存图片失败: {e}")
+            else:
+                logger.error(f"图片保存失败: {fn}")
+                QMessageBox.warning(self, "警告", "图片保存失败，请检查路径或格式")
+        except Exception as e:
+            logger.error(f"保存图片异常: {e}", exc_info=True)
+            QMessageBox.critical(self, "错误", f"保存图片失败: {e}")
+
+    # ★ 新增：复制整个 UI 到剪贴板
+    def _copy_screenshot(self):
+        """抓取整个 UI（含标题栏）并复制到剪贴板，可直接 Ctrl+V 粘贴"""
+        pixmap = self._grab_full_ui()
+        if pixmap.isNull():
+            QMessageBox.warning(self, "警告", "截图失败，请重试")
+            return
+        QApplication.clipboard().setPixmap(pixmap)
+        logger.success("整个界面已复制到剪贴板，可直接粘贴使用")
 
     def _save_csv(self):
         x, y = self.data_ctrl.get_data()

@@ -45,6 +45,7 @@ class UITheme:
         "save_csv": ("保存CSV", "btn_action", False, False),
         "load_wave": ("加载波形", "btn_action", False, False),
         "cursor": ("光标测量", "btn_action", False, False),
+        "screenshot": ("截图", "btn_action", False, False),
     }
 
     _BUTTON_BASE = """
@@ -131,6 +132,7 @@ class UIState:
     view_locked: bool = False
     btn_pc_mode: Optional[QPushButton] = None
     btn_pressure_test: Optional[QPushButton] = None
+    btn_screenshot: Optional[QPushButton] = None
 
 
 class LogWidget(QWidget):
@@ -317,6 +319,16 @@ class MainWindowUiMixin:
         self.state.btn_lock_view.setCheckable(True)
         self.state.btn_lock_view.clicked.connect(self._toggle_view_lock)
         layout.addWidget(self.state.btn_lock_view)
+
+
+        #截图按钮（复制整个 UI 到剪贴板）
+        text, _, _, _ = UITheme.BUTTON_TEXTS["screenshot"]
+        self.state.btn_screenshot = QPushButton(text)
+        self.state.btn_screenshot.setStyleSheet(UITheme.BUTTON_STYLES["action"])
+        self.state.btn_screenshot.setToolTip("复制整个界面到剪贴板，可直接粘贴使用")
+        self.state.btn_screenshot.clicked.connect(self._copy_screenshot)
+        layout.addWidget(self.state.btn_screenshot)
+
         layout.addStretch()
 
         self.state.label_status = QLabel("● 未连接")
@@ -464,6 +476,7 @@ class MainWindowUiMixin:
 
     def _build_plot_area(self):
         plot = pg.PlotWidget()
+        plot.getPlotItem().setMenuEnabled(False)
         plot.setBackground(UITheme.COLORS["bg_chart"])
         plot.showGrid(x=True, y=True, alpha=0.15)
         plot.setLabel("bottom", "时间", units="s", color=UITheme.COLORS["fg_secondary"])
