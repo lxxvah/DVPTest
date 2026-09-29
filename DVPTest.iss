@@ -1,14 +1,14 @@
 ; ============================================================
 ;  DVPTest 安装程序脚本
-;  用途：把 dist\DVPTest\ 文件夹打成 Windows 安装包
+;  用途：把 dist\DVPTest_Multi\ 文件夹打成 Windows 安装包
 ; ============================================================
 
 #define MyAppName        "泄气充气压力性能测试"
 #define MyAppNameEn      "DVPTest"
 #define MyAppVersion     "1.1.0"
 #define MyAppPublisher   "得鹿梦鱼"
-#define MyAppExeName     "DVPTest.exe"
-#define MySourceDir      "dist\DVPTest"
+#define MyAppExeName     "DVPTest_Multi.exe"
+#define MySourceDir      "dist\DVPTest_Multi"
 #define MyIconFile       "app.ico"
 
 [Setup]
@@ -40,7 +40,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "创建桌面快捷方式"; GroupDescription: "附加图标:"; Flags: checkedonce
 
 [Files]
-; dist\DVPTest\ 整个目录复制到安装目录
+; dist\DVPTest_Multi\ 整个目录复制到安装目录
 Source: "{#MySourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
