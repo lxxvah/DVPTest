@@ -12,8 +12,10 @@ git add .
 :: 检查是否有实际变更
 git diff --cached --quiet
 if %errorlevel% equ 0 (
+    echo.
     echo 没有需要提交的更改，脚本退出。
-    exit
+    pause
+    exit /b 0
 )
 
 set "MSG=Auto: "
@@ -34,20 +36,32 @@ if %HAS_BAT% equ 1 set "MSG=%MSG%Update Bat scripts "
 :: 如果什么都没匹配到
 if "%MSG%"=="Auto: " set "MSG=Auto: Update project files"
 
-:: 加上时间戳
-set "MSG=%MSG% [%date:~0,10% %time:~0,8%]"
+:: 加上时间戳（去掉 %time% 在 10 点前的空格）
+set "T=%time: =0%"
+set "MSG=%MSG% [%date:~0,10% %T:~0,8%]"
 
+echo.
 echo 分析完成，自动生成提交信息: %MSG%
 git commit -m "%MSG%"
+
+if %errorlevel% neq 0 (
+    echo.
+    echo Git 提交失败，请检查 Git 配置或是否有冲突。
+    pause
+    exit /b %errorlevel%
+)
 
 :: 推送到远程仓库
 git push
 
 if %errorlevel% neq 0 (
+    echo.
     echo GitHub 推送失败，请检查网络或 Git 配置。
     pause
     exit /b %errorlevel%
 )
 
+echo.
 echo GitHub 推送成功！
-exit
+pause
+exit /b 0
